@@ -1,3 +1,3 @@
 # MyDataStructure
 
-- 표준 템플릿 라이브러리 구현
+- C++ STL 자료구조의 기능을 직접 구현
