@@ -39,7 +39,11 @@ private:
 
 template<typename T>
 inline MyVector<T>::MyVector(size_t capacity)
+	: m_size(0)
+	, m_capacity(capacity)
+	, m_arr(new T[capacity])
 {
+
 }
 
 template<typename T>
