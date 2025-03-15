@@ -66,7 +66,19 @@ inline MyVector<T>::MyVector(const MyVector& rhs)
 
 template<typename T>
 inline MyVector<T>::MyVector(MyVector&& rhs)
+	: m_size(rhs.m_size)
+	, m_capacity(rhs.m_capacity)
+	, m_arr(rhs.m_arr)
 {
+	/*
+	 * 이동 생성자
+	 *	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
+	 *  - rvalue는 임시 객체를 의미한다.
+	 */
+
+	rhs.m_size = 0;
+	rhs.m_capacity = 0;
+	rhs.m_arr = nullptr;
 }
 
 template<typename T>
