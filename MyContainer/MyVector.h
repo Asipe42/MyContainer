@@ -103,24 +103,49 @@ inline MyVector<T>& MyVector<T>::operator=(const MyVector& rhs)
 	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
 	 */
 
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
 	if (m_capacity < rhs.m_capacity)
 	{
 		delete[] m_arr;
 		m_arr = new T[rhs.m_capacity];
+		m_capacity = rhs.m_capacity;
 	}
 
 	memcpy(m_arr, rhs.m_arr, sizeof(T) * rhs.m_size);
 	m_size = rhs.m_size;
-	m_capacity = rhs.m_capacity;
-}
 
+	return *this;
+}
 
 template<typename T>
 inline MyVector<T>& MyVector<T>::operator=(MyVector&& rhs)
 {
 	/*
 	 * 이동 대입 연산자
+	 *	- 이동 생성자와 비슷하게 동작한다.
+	 *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
 	 */
+
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	delete[] m_arr;
+
+	m_arr = rhs.m_arr;
+	m_capacity = rhs.m_capacity;
+	m_size = rhs.m_size;
+
+	rhs.m_size = 0;
+	rhs.m_capacity = 0;
+	rhs.m_arr = nullptr;
+
+	return *this;
 }
 
 template<typename T>
