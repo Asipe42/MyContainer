@@ -48,7 +48,20 @@ inline MyVector<T>::MyVector(size_t capacity)
 
 template<typename T>
 inline MyVector<T>::MyVector(const MyVector& rhs)
+	: m_size(rhs.m_size)
+	, m_capacity(rhs.m_capacity)
+	, m_arr(new T[rhs.m_capacity])
 {
+	/*
+	 * 복사 생성자
+	 *	- 깊은 복사를 수행한다.
+	 *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
+	 */
+
+	for (size_t i = 0; i < m_size; i++)
+	{
+		m_arr[i] = rhs.m_arr[i];
+	}
 }
 
 template<typename T>
