@@ -10,7 +10,6 @@
 template <typename T>
 class MyVector
 {
-
 public:
 	MyVector(size_t capacity = 16);
 	MyVector(const MyVector& rhs);
@@ -31,4 +30,91 @@ public:
 	void push_back(const T& value);
 	void pop_back();
 	void clear();
+
+private:
+	size_t m_size;
+	size_t m_capacity;
+	T* m_arr;
 };
+
+template<typename T>
+inline MyVector<T>::MyVector(size_t capacity)
+{
+}
+
+template<typename T>
+inline MyVector<T>::MyVector(const MyVector& rhs)
+{
+}
+
+template<typename T>
+inline MyVector<T>::MyVector(MyVector&& rhs)
+{
+}
+
+template<typename T>
+inline MyVector<T>::~MyVector()
+{
+}
+
+template<typename T>
+inline T* MyVector<T>::begin()
+{
+	return nullptr;
+}
+
+template<typename T>
+inline T* MyVector<T>::end()
+{
+	return nullptr;
+}
+
+template<typename T>
+inline T& MyVector<T>::front()
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+}
+
+template<typename T>
+inline T& MyVector<T>::back()
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+}
+
+template<typename T>
+inline size_t MyVector<T>::size()
+{
+	return size_t();
+}
+
+template<typename T>
+inline size_t MyVector<T>::capacity()
+{
+	return size_t();
+}
+
+template<typename T>
+inline bool MyVector<T>::empty()
+{
+	return false;
+}
+
+template<typename T>
+inline void MyVector<T>::reserve(size_t capacity)
+{
+}
+
+template<typename T>
+inline void MyVector<T>::push_back(const T& value)
+{
+}
+
+template<typename T>
+inline void MyVector<T>::pop_back()
+{
+}
+
+template<typename T>
+inline void MyVector<T>::clear()
+{
+}
