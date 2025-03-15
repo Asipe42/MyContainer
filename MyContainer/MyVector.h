@@ -95,20 +95,32 @@ inline MyVector<T>::~MyVector()
 }
 
 template<typename T>
-inline MyVector& MyVector<T>::operator=(const MyVector& rhs)
+inline MyVector<T>& MyVector<T>::operator=(const MyVector& rhs)
 {
-	if (rhs == nullptr)
+	/*
+	 * 복사 대입	연산자
+	 *	- 복사 생성자와 비슷하게 동작한다.
+	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
+
+	if (m_capacity < rhs.m_capacity)
 	{
-		return *this;
+		delete[] m_arr;
+		m_arr = new T[rhs.m_capacity];
 	}
 
-	return *this;
+	memcpy(m_arr, rhs.m_arr, sizeof(T) * rhs.m_size);
+	m_size = rhs.m_size;
+	m_capacity = rhs.m_capacity;
 }
 
+
 template<typename T>
-inline MyVector& MyVector<T>::operator=(MyVector&& rhs)
+inline MyVector<T>& MyVector<T>::operator=(MyVector&& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	/*
+	 * 이동 대입 연산자
+	 */
 }
 
 template<typename T>
