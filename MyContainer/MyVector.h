@@ -84,6 +84,10 @@ inline MyVector<T>::MyVector(MyVector&& rhs)
 template<typename T>
 inline MyVector<T>::~MyVector()
 {
+	if (m_arr != nullptr)
+	{
+		delete[] m_arr;
+	}
 }
 
 template<typename T>
