@@ -151,7 +151,7 @@ inline MyVector<T>& MyVector<T>::operator=(MyVector&& rhs)
 template<typename T>
 inline T& MyVector<T>::operator[](size_t index)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	return m_arr[index];
 }
 
 template<typename T>
