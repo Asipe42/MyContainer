@@ -15,6 +15,10 @@ public:
 	MyVector(const MyVector& rhs);
 	MyVector(MyVector&& rhs);
 	~MyVector();
+	
+	MyVector& operator=(const MyVector& rhs);
+	MyVector& operator=(MyVector&& rhs);
+	T& operator[](size_t index);
 
 	T* begin();
 	T* end();
@@ -88,6 +92,29 @@ inline MyVector<T>::~MyVector()
 	{
 		delete[] m_arr;
 	}
+}
+
+template<typename T>
+inline MyVector& MyVector<T>::operator=(const MyVector& rhs)
+{
+	if (rhs == nullptr)
+	{
+		return *this;
+	}
+
+	return *this;
+}
+
+template<typename T>
+inline MyVector& MyVector<T>::operator=(MyVector&& rhs)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+}
+
+template<typename T>
+inline T& MyVector<T>::operator[](size_t index)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
 }
 
 template<typename T>
