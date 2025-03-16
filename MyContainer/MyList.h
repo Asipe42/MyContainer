@@ -26,6 +26,11 @@ public:
 		{
 		}
 
+		T& operator*()
+		{
+			return m_iter->m_data;
+		}
+
 		Node* operator&()
 		{
 			return m_iter;
@@ -37,10 +42,24 @@ public:
 			return *this;
 		}
 
+		iterator operator++(int)
+		{
+			iterator* temp = *this;
+			this->m_iter = this->m_iter->m_next;
+			return temp;
+		}
+
 		iterator& operator--()
 		{
 			m_iter = m_iter->m_prev;
 			return *this;
+		}
+
+		iterator operator--(int)
+		{
+			iterator* temp = *this;
+			this->m_iter = this->m_iter->m_prev;
+			return temp;
 		}
 
     private:
