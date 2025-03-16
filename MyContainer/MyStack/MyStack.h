@@ -63,6 +63,7 @@ inline MyStack<T>::MyStack(MyStack&& rhs) noexcept
 template<typename T>
 inline MyStack<T>::~MyStack() noexcept
 {
+	
 }
 
 template<typename T>

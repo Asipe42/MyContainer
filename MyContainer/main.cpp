@@ -1,6 +1,6 @@
-#include "MyVector.h"
-#include "MyList.h"
-#include "MyStack.h"
+#include "MyVector/MyVector.h"
+#include "MyStack/MyStack.h"
+#include "MyList/MyList.h"
 #include <iostream>
 
 using namespace std;
