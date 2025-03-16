@@ -90,10 +90,7 @@ inline MyVector<T>::MyVector(MyVector&& rhs) noexcept
 template<typename T>
 inline MyVector<T>::~MyVector() noexcept
 {
-	if (m_arr != nullptr)
-	{
-		delete[] m_arr;
-	}
+	delete[] m_arr;
 }
 
 template<typename T>
@@ -239,11 +236,6 @@ inline void MyVector<T>::pop_back() noexcept
 	if (m_size > 0)
 	{
 		m_size--;
-	}
-	m_size--;
-	if (m_size < 0)
-	{
-		m_size = 0;
 	}
 }
 
