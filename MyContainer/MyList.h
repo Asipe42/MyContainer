@@ -213,13 +213,13 @@ inline T& MyList<T>::operator[](size_t index) const
 template<typename T>
 inline bool MyList<T>::empty() const
 {
-	return false;
+	return m_size == 0;
 }
 
 template<typename T>
 inline size_t MyList<T>::size() const
 {
-	return size_t();
+	return m_size;
 }
 
 template<typename T>
