@@ -19,6 +19,9 @@
     <Filter Include="헤더 파일\MyList">
       <UniqueIdentifier>{30e87ac0-65ba-4eaa-a902-3666856f28c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\MyStack">
+      <UniqueIdentifier>{79ad80a5-b7f8-4449-91b7-5446b2e64e28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyVector.h">
@@ -26,6 +29,9 @@
     </ClInclude>
     <ClInclude Include="MyList.h">
       <Filter>헤더 파일\MyList</Filter>
+    </ClInclude>
+    <ClInclude Include="MyStack.h">
+      <Filter>헤더 파일\MyStack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
