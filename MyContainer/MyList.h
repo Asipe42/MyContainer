@@ -169,48 +169,32 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 	}
 
 	Node* nowNode = m_head;
-	for (int i = 0; i < m_size; i++)
+	while (nowNode != nullptr)
 	{
-		Node* nextNode = m_head->m_next;
+		Node* nextNode = nowNode->m_next;
 		delete nowNode;
 		nowNode = nextNode;
 	}
 
-	if (rhs.m_size == 0)
-	{
-		m_size = rhs.m_size;
-
-		m_head->m_prev = nullptr;
-		m_head->m_next = m_tail;
-		
-		m_tail->m_prev = m_head;
-		m_tail->m_next = nullptr;
-
-		return *this;
-	}
-
 	nowNode = rhs.m_head;
-	for (int i = 0; i < rhs.m_size; i++)
+
+	while (nowNode != nullptr)
 	{
 		Node* newNode = new Node;
 		newNode->m_data = nowNode->m_data;
 		newNode->m_prev = nowNode->m_prev;
 		newNode->m_next = nowNode->m_next;
 
-		if (i == 0)
+		if (m_head == nullptr)
 		{
 			m_head = newNode;
 		}
-
-		if (i == rhs.m_size - 1)
-		{
-			m_tail = newNode;
-		}
-
-		nowNode = nowNode->m_next;
 	}
 
+	m_tail->m_prev = nowNode;
+	m_tail->m_next = nullptr;
 	m_size = rhs.m_size;
+
 	return *this;
 }
 
