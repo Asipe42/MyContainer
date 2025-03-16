@@ -236,6 +236,10 @@ inline void MyVector<T>::push_back(const T& value)
 template<typename T>
 inline void MyVector<T>::pop_back() noexcept
 {
+	if (m_size > 0)
+	{
+		m_size--;
+	}
 	m_size--;
 	if (m_size < 0)
 	{
