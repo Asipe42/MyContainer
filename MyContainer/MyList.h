@@ -200,7 +200,14 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 template<typename T>
 inline T& MyList<T>::operator[](size_t index) const
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	Node* temp = m_head;
+
+	for (size_t i = 0; i <= index; i++)
+	{
+		temp = temp->m_next;
+	}
+
+	return temp->m_data;
 }
 
 template<typename T>
