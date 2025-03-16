@@ -157,13 +157,13 @@ inline T& MyVector<T>::operator[](size_t index)
 template<typename T>
 inline T* MyVector<T>::begin()
 {
-	return nullptr;
+	return m_arr;
 }
 
 template<typename T>
 inline T* MyVector<T>::end()
 {
-	return nullptr;
+	return m_arr + m_size;
 }
 
 template<typename T>
