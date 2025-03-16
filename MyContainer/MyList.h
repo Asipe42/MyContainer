@@ -265,11 +265,33 @@ inline T MyList<T>::back() const
 template<typename T>
 inline void MyList<T>::push_front(const T& value)
 {
+	Node* newNode = new Node();
+	Node* firstNode = m_head->m_next;
+
+	newNode->m_data = value;
+	newNode->m_prev = m_head;
+	newNode->m_next = firstNode;
+
+	firstNode->m_prev = newNode;
+	m_head->m_next = newNode;
+
+	m_size++;
 }
 
 template<typename T>
 inline void MyList<T>::push_back(const T& value)
 {
+	Node* newNode = new Node();
+	Node* lastNode = m_tail->m_prev;
+
+	newNode->m_data = value;
+	newNode->m_prev = lastNode;
+	newNode->m_next = m_tail;
+
+	lastNode->m_next = newNode;
+	m_tail->m_prev = newNode;
+
+	m_size++;
 }
 
 template<typename T>
