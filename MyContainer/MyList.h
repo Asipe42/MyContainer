@@ -44,7 +44,7 @@ public:
 
 		iterator operator++(int)
 		{
-			iterator* temp = *this;
+			iterator temp = *this;
 			this->m_iter = this->m_iter->m_next;
 			return temp;
 		}
@@ -60,6 +60,11 @@ public:
 			iterator* temp = *this;
 			this->m_iter = this->m_iter->m_prev;
 			return temp;
+		}
+
+		bool operator!=(const iterator& other) const
+		{
+			return this->m_iter != other.m_iter;
 		}
 
     private:
