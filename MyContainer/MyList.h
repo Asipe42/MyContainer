@@ -195,12 +195,6 @@ inline MyList<T>::~MyList() noexcept
 template<typename T>
 inline MyList<T>& MyList<T>::operator=(const MyList& rhs)
 {
-	
-}
-
-template<typename T>
-inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
-{
 	/*
 	 * 복사 대입	연산자
 	 *	- 복사 생성자와 비슷하게 동작한다.
@@ -240,6 +234,39 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 	m_tail->m_prev = newNode;
 	m_tail->m_next = nullptr;
 	m_size = rhs.m_size;
+
+	return *this;
+}
+
+template<typename T>
+inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
+{
+	/*
+	 * 이동 대입 연산자
+	 *	- 이동 생성자와 비슷하게 동작한다.
+	 *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
+
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	Node* nowNode = m_head;
+	while (nowNode != nullptr)
+	{
+		Node* nextNode = nowNode->m_next;
+		delete nowNode;
+		nowNode = nextNode;
+	}
+
+	m_head = rhs.m_head;
+	m_tail = rhs.m_tail;
+	m_size = rhs.m_size;
+
+	rhs.m_head = nullptr;
+	rhs.m_tail = nullptr;
+	rhs.m_size = 0;
 
 	return *this;
 }
