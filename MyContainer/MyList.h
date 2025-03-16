@@ -106,12 +106,12 @@ inline MyList<T>::MyList(const MyList& rhs)
 
 		if (i == 0)
 		{
-			m_head = nowNode;
+			m_head = newNode;
 		}
 
 		if (i == m_size - 1)
 		{
-			m_tail = nowNode;
+			m_tail = newNode;
 		}
 
 		nowNode = nowNode->m_next;
@@ -151,13 +151,67 @@ inline MyList<T>::~MyList() noexcept
 template<typename T>
 inline MyList<T>& MyList<T>::operator=(const MyList& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	
 }
 
 template<typename T>
 inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	/*
+	 * 복사 대입	연산자
+	 *	- 복사 생성자와 비슷하게 동작한다.
+	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
+
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	Node* nowNode = m_head;
+	for (int i = 0; i < m_size; i++)
+	{
+		Node* nextNode = m_head->m_next;
+		delete nowNode;
+		nowNode = nextNode;
+	}
+
+	if (rhs.m_size == 0)
+	{
+		m_size = rhs.m_size;
+
+		m_head->m_prev = nullptr;
+		m_head->m_next = m_tail;
+		
+		m_tail->m_prev = m_head;
+		m_tail->m_next = nullptr;
+
+		return *this;
+	}
+
+	nowNode = rhs.m_head;
+	for (int i = 0; i < rhs.m_size; i++)
+	{
+		Node* newNode = new Node;
+		newNode->m_data = nowNode->m_data;
+		newNode->m_prev = nowNode->m_prev;
+		newNode->m_next = nowNode->m_next;
+
+		if (i == 0)
+		{
+			m_head = newNode;
+		}
+
+		if (i == rhs.m_size - 1)
+		{
+			m_tail = newNode;
+		}
+
+		nowNode = nowNode->m_next;
+	}
+
+	m_size = rhs.m_size;
+	return *this;
 }
 
 template<typename T>
