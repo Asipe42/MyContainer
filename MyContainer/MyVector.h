@@ -181,19 +181,19 @@ inline T& MyVector<T>::back()
 template<typename T>
 inline size_t MyVector<T>::size()
 {
-	return size_t();
+	return m_size;
 }
 
 template<typename T>
 inline size_t MyVector<T>::capacity()
 {
-	return size_t();
+	return m_capacity;
 }
 
 template<typename T>
 inline bool MyVector<T>::empty()
 {
-	return false;
+	return m_size == 0;
 }
 
 template<typename T>
