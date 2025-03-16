@@ -333,6 +333,18 @@ inline void MyList<T>::pop_back()
 template<typename T>
 inline void MyList<T>::insert(iterator iter, const T& value)
 {
+	Node* newNode = new Node();
+	Node* target = &iter;
+	Node* prevNode = target->m_prev;
+
+	newNode->m_data = value;
+	newNode->m_prev = prevNode;
+	newNode->m_next = target;
+
+	prevNode->m_next = newNode;
+	target->m_prev = newNode;
+
+	m_size++;
 }
 
 template<typename T>
