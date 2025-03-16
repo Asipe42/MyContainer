@@ -199,6 +199,17 @@ inline bool MyVector<T>::empty()
 template<typename T>
 inline void MyVector<T>::reserve(size_t capacity)
 {
+	if (capacity <= m_capacity)
+	{
+		return;
+	}
+
+	T* tempArr = new[m_capacity];
+	memcpy(tempArr, m_arr, sizeof(T) * m_size);
+	delete[] m_arr;
+	m_arr = tempArr;
+
+	m_capacity = capacity;
 }
 
 template<typename T>
