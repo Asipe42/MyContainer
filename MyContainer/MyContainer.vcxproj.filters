@@ -16,10 +16,16 @@
     <Filter Include="헤더 파일\MyVector">
       <UniqueIdentifier>{e701a54f-7722-44e6-b4a8-62b7fb7c3172}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\MyList">
+      <UniqueIdentifier>{30e87ac0-65ba-4eaa-a902-3666856f28c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyVector.h">
       <Filter>헤더 파일\MyVector</Filter>
+    </ClInclude>
+    <ClInclude Include="MyList.h">
+      <Filter>헤더 파일\MyList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
