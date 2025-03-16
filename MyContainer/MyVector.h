@@ -234,6 +234,14 @@ inline void MyVector<T>::push_back(const T& value)
 template<typename T>
 inline void MyVector<T>::pop_back()
 {
+	m_size--;
+
+	if (m_size <= 0)
+	{
+		m_size = 0;
+	}
+
+	int index = m_size - 1;
 }
 
 template<typename T>
