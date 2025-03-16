@@ -1,3 +1,5 @@
+// Copyright Modin, All Rights Reserved.
+
 #pragma once
 #include <memory>
 
@@ -8,6 +10,11 @@ public:
 	struct Node;
     class iterator
     {
+		/*
+		 * iterator
+		 *	- 특정한 노드를 가리키는 포인터이다.
+		 */
+
     public:
 		iterator()
 			: m_iter(new Node)
