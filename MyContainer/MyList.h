@@ -241,13 +241,25 @@ inline typename MyList<T>::iterator MyList<T>::end() const
 template<typename T>
 inline T MyList<T>::front() const
 {
-	return T();
+	Node* nextNode = m_head->m_next;
+	if (nextNode == nullptr)
+	{
+		return T();
+	}
+
+	return nextNode->m_data;
 }
 
 template<typename T>
 inline T MyList<T>::back() const
 {
-	return T();
+	Node* prevNode = m_tail->m_prev;
+	if (prevNode == nullptr)
+	{
+		return T();
+	}
+
+	return prevNode->m_data;
 }
 
 template<typename T>
