@@ -350,4 +350,14 @@ inline void MyList<T>::insert(iterator iter, const T& value)
 template<typename T>
 inline void MyList<T>::erase(iterator iter)
 {
+	Node* target = &iter;
+	Node* prevNode = target->m_prev;
+	Node* nextNode = target->m_next;
+
+	prevNode->m_next = nextNode;
+	nextNode->m_prev = prevNode;
+
+	delete target;
+
+	m_size--;
 }
