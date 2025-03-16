@@ -90,32 +90,31 @@ inline MyList<T>::MyList(const MyList& rhs)
 	 *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
 	 */
 
-	if (m_size == 0)
+	if (m_head == nullptr)
 	{
 		MyList();
 		return;
 	}
 
 	Node* nowNode = rhs.m_head;
-	for (int i = 0; i < m_size; i++)
+	Node* newNode = new Node;
+
+	while(nowNode != nullptr)
 	{
-		Node* newNode = new Node;
 		newNode->m_data = nowNode->m_data;
 		newNode->m_prev = nowNode->m_prev;
 		newNode->m_next = nowNode->m_next;
 
-		if (i == 0)
+		if (m_head == nullptr)
 		{
 			m_head = newNode;
 		}
 
-		if (i == m_size - 1)
-		{
-			m_tail = newNode;
-		}
-
 		nowNode = nowNode->m_next;
 	}
+
+	m_tail->m_prev = newNode;
+	m_tail->m_next = nullptr;
 }
 
 template<typename T>
@@ -177,10 +176,10 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 	}
 
 	nowNode = rhs.m_head;
+	Node* newNode = new Node;
 
 	while (nowNode != nullptr)
 	{
-		Node* newNode = new Node;
 		newNode->m_data = nowNode->m_data;
 		newNode->m_prev = nowNode->m_prev;
 		newNode->m_next = nowNode->m_next;
@@ -191,7 +190,7 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 		}
 	}
 
-	m_tail->m_prev = nowNode;
+	m_tail->m_prev = newNode;
 	m_tail->m_next = nullptr;
 	m_size = rhs.m_size;
 
