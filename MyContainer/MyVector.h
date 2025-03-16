@@ -204,7 +204,7 @@ inline void MyVector<T>::reserve(size_t capacity)
 		return;
 	}
 
-	T* tempArr = new[m_capacity];
+	T* tempArr = new T[capacity];
 	memcpy(tempArr, m_arr, sizeof(T) * m_size);
 	delete[] m_arr;
 	m_arr = tempArr;
@@ -215,6 +215,20 @@ inline void MyVector<T>::reserve(size_t capacity)
 template<typename T>
 inline void MyVector<T>::push_back(const T& value)
 {
+	/*
+	 * 설명
+	 *	- 배열 마지막에 원소를 추가한다.
+	 *  - 수용량을 초과하면 더 큰 배열을 만들어 기존 배열을 복사한다.
+	 */
+
+	m_size++;
+	if (m_capacity <= m_size)
+	{
+		reserve(m_capacity * 2);
+	}
+
+	int index = m_size - 1;
+	m_arr[index] = value;
 }
 
 template<typename T>
