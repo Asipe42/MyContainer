@@ -297,11 +297,37 @@ inline void MyList<T>::push_back(const T& value)
 template<typename T>
 inline void MyList<T>::pop_front()
 {
+	if (empty())
+	{
+		return;
+	}
+
+	Node* firstNode = m_head->m_next;
+
+	m_head->m_next = firstNode->m_next;
+	firstNode->m_next->m_prev = m_head;
+
+	delete firstNode;
+
+	m_size--;
 }
 
 template<typename T>
 inline void MyList<T>::pop_back()
 {
+	if (empty())
+	{
+		return;
+	}
+
+	Node* lastNode = m_tail->m_prev;
+
+	m_tail->m_prev = lastNode->m_prev;
+	lastNode->m_prev->m_prev = m_tail;
+
+	delete lastNode;
+
+	m_size--;
 }
 
 template<typename T>
