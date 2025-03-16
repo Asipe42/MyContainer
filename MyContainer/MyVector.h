@@ -169,13 +169,13 @@ inline T* MyVector<T>::end()
 template<typename T>
 inline T& MyVector<T>::front()
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	return m_arr[0];
 }
 
 template<typename T>
 inline T& MyVector<T>::back()
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	return m_arr[m_size - 1];
 }
 
 template<typename T>
