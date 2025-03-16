@@ -49,7 +49,12 @@ inline MyVector<T>::MyVector(size_t capacity) noexcept
 	, m_capacity(capacity)
 	, m_arr(new T[capacity])
 {
+	if (capacity == 0)
+	{
+		m_capacity = 1;
+	}
 
+	m_capacity = capacity;
 }
 
 template<typename T>
@@ -220,13 +225,17 @@ inline void MyVector<T>::push_back(const T& value)
 	 *  - 수용량을 초과하면 더 큰 배열을 만들어 기존 배열을 복사한다.
 	 */
 
-	m_size++;
-	if (m_capacity <= m_size)
+	if (m_size >= m_capacity)
 	{
+		if (m_capacity == 0)
+		{
+			m_capacity = 1;
+		}
+
 		reserve(m_capacity * 2);
 	}
 
-	int index = m_size - 1;
+	int index = m_size;
 	m_arr[index] = value;
 }
 
