@@ -6,9 +6,9 @@ class MyList
 {
 public:
 	struct Node;
-	class iterator
-	{
-	public:
+    class iterator
+    {
+    public:
 		iterator()
 			: m_iter(new Node)
 		{
@@ -24,9 +24,21 @@ public:
 			return m_iter;
 		}
 
-	private:
+		iterator& operator++()
+		{
+			m_iter = m_iter->m_next;
+			return *this;
+		}
+
+		iterator& operator--()
+		{
+			m_iter = m_iter->m_prev;
+			return *this;
+		}
+
+    private:
 		Node* m_iter;
-	};
+    };
 
 public:
 	MyList() noexcept;
