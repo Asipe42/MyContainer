@@ -107,7 +107,9 @@ inline MyList<T>::MyList(const MyList& rhs)
 
 		if (m_head == nullptr)
 		{
-			m_head = newNode;
+			m_head = new Node();
+			m_head->m_prev = nullptr;
+			m_head->m_next = newNode;
 		}
 
 		nowNode = nowNode->m_next;
@@ -186,7 +188,9 @@ inline MyList<T>& MyList<T>::operator=(MyList&& rhs)
 
 		if (m_head == nullptr)
 		{
-			m_head = newNode;
+			m_head = new Node();
+			m_head->m_prev = nullptr;
+			m_head->m_next = newNode;
 		}
 	}
 
@@ -225,13 +229,13 @@ inline size_t MyList<T>::size() const
 template<typename T>
 inline typename MyList<T>::iterator MyList<T>::begin() const
 {
-	return iterator();
+	return iterator(m_head->m_next);
 }
 
 template<typename T>
 inline typename MyList<T>::iterator MyList<T>::end() const
 {
-	return iterator();
+	return iterator(m_tail);
 }
 
 template<typename T>
