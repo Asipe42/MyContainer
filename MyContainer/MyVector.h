@@ -13,29 +13,29 @@ template <typename T>
 class MyVector
 {
 public:
-	MyVector(size_t capacity = 16);
+	MyVector(size_t capacity = 16) noexcept;
 	MyVector(const MyVector& rhs);
-	MyVector(MyVector&& rhs);
-	~MyVector();
+	MyVector(MyVector&& rhs) noexcept;
+	~MyVector() noexcept;
 	
 	MyVector& operator=(const MyVector& rhs);
 	MyVector& operator=(MyVector&& rhs);
 	T& operator[](size_t index) const;
 
-	T* begin() const;
-	T* end() const;
+	T* begin() const noexcept;
+	T* end() const noexcept;
 
-	T& front() const;
-	T& back() const;
+	T& front() const noexcept;
+	T& back() const noexcept;
 
-	size_t size() const;
-	size_t capacity() const;
-	bool empty() const;
+	size_t size() const noexcept;
+	size_t capacity() const noexcept;
+	bool empty() const noexcept;
 	void reserve(size_t capacity);
 
 	void push_back(const T& value);
-	void pop_back();
-	void clear();
+	void pop_back() noexcept;
+	void clear() noexcept;
 
 private:
 	size_t m_size;
@@ -44,7 +44,7 @@ private:
 };
 
 template<typename T>
-inline MyVector<T>::MyVector(size_t capacity)
+inline MyVector<T>::MyVector(size_t capacity) noexcept
 	: m_size(0)
 	, m_capacity(capacity)
 	, m_arr(new T[capacity])
@@ -71,7 +71,7 @@ inline MyVector<T>::MyVector(const MyVector& rhs)
 }
 
 template<typename T>
-inline MyVector<T>::MyVector(MyVector&& rhs)
+inline MyVector<T>::MyVector(MyVector&& rhs) noexcept
 	: m_size(rhs.m_size)
 	, m_capacity(rhs.m_capacity)
 	, m_arr(rhs.m_arr)
@@ -88,7 +88,7 @@ inline MyVector<T>::MyVector(MyVector&& rhs)
 }
 
 template<typename T>
-inline MyVector<T>::~MyVector()
+inline MyVector<T>::~MyVector() noexcept
 {
 	if (m_arr != nullptr)
 	{
@@ -157,43 +157,43 @@ inline T& MyVector<T>::operator[](size_t index) const
 }
 
 template<typename T>
-inline T* MyVector<T>::begin() const
+inline T* MyVector<T>::begin() const noexcept
 {
 	return m_arr;
 }
 
 template<typename T>
-inline T* MyVector<T>::end() const
+inline T* MyVector<T>::end() const noexcept
 {
 	return m_arr + m_size;
 }
 
 template<typename T>
-inline T& MyVector<T>::front() const
+inline T& MyVector<T>::front() const noexcept
 {
 	return m_arr[0];
 }
 
 template<typename T>
-inline T& MyVector<T>::back() const
+inline T& MyVector<T>::back() const noexcept
 {
 	return m_arr[m_size - 1];
 }
 
 template<typename T>
-inline size_t MyVector<T>::size() const
+inline size_t MyVector<T>::size() const noexcept
 {
 	return m_size;
 }
 
 template<typename T>
-inline size_t MyVector<T>::capacity() const
+inline size_t MyVector<T>::capacity() const noexcept
 {
 	return m_capacity;
 }
 
 template<typename T>
-inline bool MyVector<T>::empty() const
+inline bool MyVector<T>::empty() const noexcept
 {
 	return m_size == 0;
 }
@@ -234,7 +234,7 @@ inline void MyVector<T>::push_back(const T& value)
 }
 
 template<typename T>
-inline void MyVector<T>::pop_back()
+inline void MyVector<T>::pop_back() noexcept
 {
 	m_size--;
 	if (m_size < 0)
@@ -244,7 +244,7 @@ inline void MyVector<T>::pop_back()
 }
 
 template<typename T>
-inline void MyVector<T>::clear()
+inline void MyVector<T>::clear() noexcept
 {
 	m_size = 0;
 }
