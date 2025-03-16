@@ -20,17 +20,17 @@ public:
 	
 	MyVector& operator=(const MyVector& rhs);
 	MyVector& operator=(MyVector&& rhs);
-	T& operator[](size_t index);
+	T& operator[](size_t index) const;
 
-	T* begin();
-	T* end();
+	T* begin() const;
+	T* end() const;
 
-	T& front();
-	T& back();
+	T& front() const;
+	T& back() const;
 
-	size_t size();
-	size_t capacity();
-	bool empty();
+	size_t size() const;
+	size_t capacity() const;
+	bool empty() const;
 	void reserve(size_t capacity);
 
 	void push_back(const T& value);
@@ -151,49 +151,49 @@ inline MyVector<T>& MyVector<T>::operator=(MyVector&& rhs)
 }
 
 template<typename T>
-inline T& MyVector<T>::operator[](size_t index)
+inline T& MyVector<T>::operator[](size_t index) const
 {
 	return m_arr[index];
 }
 
 template<typename T>
-inline T* MyVector<T>::begin()
+inline T* MyVector<T>::begin() const
 {
 	return m_arr;
 }
 
 template<typename T>
-inline T* MyVector<T>::end()
+inline T* MyVector<T>::end() const
 {
 	return m_arr + m_size;
 }
 
 template<typename T>
-inline T& MyVector<T>::front()
+inline T& MyVector<T>::front() const
 {
 	return m_arr[0];
 }
 
 template<typename T>
-inline T& MyVector<T>::back()
+inline T& MyVector<T>::back() const
 {
 	return m_arr[m_size - 1];
 }
 
 template<typename T>
-inline size_t MyVector<T>::size()
+inline size_t MyVector<T>::size() const
 {
 	return m_size;
 }
 
 template<typename T>
-inline size_t MyVector<T>::capacity()
+inline size_t MyVector<T>::capacity() const
 {
 	return m_capacity;
 }
 
 template<typename T>
-inline bool MyVector<T>::empty()
+inline bool MyVector<T>::empty() const
 {
 	return m_size == 0;
 }
