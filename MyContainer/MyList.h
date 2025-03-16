@@ -69,7 +69,15 @@ private:
 
 template<typename T>
 inline MyList<T>::MyList() noexcept
+	: m_head(new Node)
+	, m_tail(new Node)
+	, m_size(0)
 {
+	m_head->m_prev = nullptr;
+	m_head->m_next = m_tail;
+
+	m_tail->m_prev = m_head;
+	m_tail->m_next = nullptr;
 }
 
 template<typename T>
