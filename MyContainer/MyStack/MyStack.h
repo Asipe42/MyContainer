@@ -77,12 +77,14 @@ inline MyStack<T>& MyStack<T>::operator=(const MyStack& rhs)
 
 	m_list = rhs.m_list;
 	m_size = rhs.m_size;
+
+	return *this;
 }
 
 template<typename T>
 inline MyStack<T>& MyStack<T>::operator=(MyStack&& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+
 }
 
 template<typename T>
