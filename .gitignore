@@ -33,3 +33,5 @@
 .vs
 MyContainer/x64/Debug
 x64/Debug
+MyContainer/Debug
+Debug
