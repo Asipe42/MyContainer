@@ -82,8 +82,8 @@ inline MyStack<T>& MyStack<T>::operator=(const MyStack& rhs)
 	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
 	 */
 
-	m_list = rhs.m_list;
-	m_size = rhs.m_size;
+	m_list(rhs.m_list);
+	m_size(rhs.m_size);
 
 	return *this;
 }
