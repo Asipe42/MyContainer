@@ -106,27 +106,36 @@ inline MyStack<T>& MyStack<T>::operator=(MyStack&& rhs)
 template<typename T>
 inline bool MyStack<T>::empty() const
 {
-	return false;
+	return m_size == 0;
 }
 
 template<typename T>
 inline size_t MyStack<T>::size() const
 {
-	return size_t();
+	return m_size;
 }
 
 template<typename T>
 inline T& MyStack<T>::top() const
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	return m_list.back();
 }
 
 template<typename T>
 inline void MyStack<T>::push(const T& value)
 {
+	m_list.push_back(value);
+	m_size = m_list.size();
 }
 
 template<typename T>
 inline void MyStack<T>::pop()
 {
+	if (m_size == 0)
+	{
+		return;
+	}
+
+	m_list.erase(m_list.end());
+	m_size = m_list.size();
 }
