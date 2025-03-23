@@ -33,7 +33,7 @@ private:
 };
 
 template<typename T>
-inline MyQueue<T>::MyQueue()
+inline MyQueue<T>::MyQueue() noexcept
 	: m_list(MyList<T>())
 	, m_size(0)
 {
@@ -53,7 +53,7 @@ inline MyQueue<T>::MyQueue(const MyQueue& rhs)
 }
 
 template<typename T>
-inline MyQueue<T>::MyQueue(MyQueue&& rhs)
+inline MyQueue<T>::MyQueue(MyQueue&& rhs) noexcept
 	: m_list(std::move(rhs.m_list))
 	, m_size(rhs.m_size)
 {
@@ -68,14 +68,23 @@ inline MyQueue<T>::MyQueue(MyQueue&& rhs)
 }
 
 template<typename T>
-inline MyQueue<T>::~MyQueue()
+inline MyQueue<T>::~MyQueue() noexcept
 {
 }
 
 template<typename T>
 inline MyQueue<T>& MyQueue<T>::operator=(const MyQueue& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	/*
+	 * 복사 대입	연산자
+	 *	- 복사 생성자와 비슷하게 동작한다.
+	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
+
+	m_list(rhs.m_list);
+	m_size(rhs.m_size);
+
+	return *this;
 }
 
 template<typename T>
