@@ -102,13 +102,13 @@ inline MyQueue<T>& MyQueue<T>::operator=(MyQueue&& rhs)
 template<typename T>
 inline bool MyQueue<T>::empty() const
 {
-	return false;
+	return m_size == 0;
 }
 
 template<typename T>
 inline size_t MyQueue<T>::size() const
 {
-	return size_t();
+	return m_size;
 }
 
 template<typename T>
