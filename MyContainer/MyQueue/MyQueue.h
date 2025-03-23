@@ -90,7 +90,13 @@ inline MyQueue<T>& MyQueue<T>::operator=(const MyQueue& rhs)
 template<typename T>
 inline MyQueue<T>& MyQueue<T>::operator=(MyQueue&& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	m_list(rhs.m_list);
+	m_size(rhs.m_size);
+
+	rhs.m_list = nullptr;
+	rhs.m_size = 0;
+
+	return *this;
 }
 
 template<typename T>
