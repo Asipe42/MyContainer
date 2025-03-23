@@ -4,6 +4,11 @@
 #include "MyList/MyList.h"
 #include <memory>
 
+/*
+ * 스택
+ * - 마지막에 들어온 데이터가 먼저 나가는 후입선출 구조이다.
+ */
+
 template<typename T>
 class MyStack
 {
