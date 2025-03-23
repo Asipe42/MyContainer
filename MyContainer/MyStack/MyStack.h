@@ -63,7 +63,6 @@ inline MyStack<T>::MyStack(MyStack&& rhs) noexcept
 	 *  - rvalue는 임시 객체를 의미한다.
 	 */
 
-	rhs.m_list = nullptr;
 	rhs.m_size = 0;
 }
 
