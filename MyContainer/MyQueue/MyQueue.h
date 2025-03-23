@@ -34,7 +34,10 @@ private:
 
 template<typename T>
 inline MyQueue<T>::MyQueue()
+	: m_list(MyList<T>())
+	, m_size(0)
 {
+
 }
 
 template<typename T>

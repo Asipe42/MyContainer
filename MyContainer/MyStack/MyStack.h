@@ -34,9 +34,10 @@ private:
 
 template<typename T>
 inline MyStack<T>::MyStack()
-	: m_size(0)
+	: m_list(MyList<T>())
+	, m_size(0)
 {
-	m_list = MyList<T>();
+
 }
 
 template<typename T>
