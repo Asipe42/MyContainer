@@ -58,11 +58,12 @@ inline MyStack<T>::MyStack(MyStack&& rhs) noexcept
 	, m_size(rhs.m_size)
 {
 	/*
-	* 이동 생성자
-	*	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
-	*  - rvalue는 임시 객체를 의미한다.
-	*/
+	 * 이동 생성자
+	 *	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
+	 *  - rvalue는 임시 객체를 의미한다.
+	 */
 
+	rhs.m_list = nullptr;
 	rhs.m_size = 0;
 }
 
