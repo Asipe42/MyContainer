@@ -89,7 +89,18 @@ inline MyStack<T>& MyStack<T>::operator=(const MyStack& rhs)
 template<typename T>
 inline MyStack<T>& MyStack<T>::operator=(MyStack&& rhs)
 {
+	/*
+	 * 이동 대입 연산자
+	 *	- 이동 생성자와 비슷하게 동작한다.
+	 *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
 
+	m_list = std::move(rhs.m_list);
+	m_size = rhs.m_size;
+
+	rhs.m_size = 0;
+
+	return *this;
 }
 
 template<typename T>
