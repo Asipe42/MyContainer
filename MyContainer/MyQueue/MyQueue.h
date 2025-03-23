@@ -114,15 +114,24 @@ inline size_t MyQueue<T>::size() const
 template<typename T>
 inline void MyQueue<T>::enqueue(const T& value)
 {
+	m_list.push_front(value);
+	m_size = m_list.size();
 }
 
 template<typename T>
 inline void MyQueue<T>::dequeue()
 {
+	if (empty())
+	{
+		return;
+	}
+
+	m_list.pop_back();
+	m_size = m_list.size();
 }
 
 template<typename T>
 inline T MyQueue<T>::peek() const
 {
-	return T();
+	return m_list.back();
 }
