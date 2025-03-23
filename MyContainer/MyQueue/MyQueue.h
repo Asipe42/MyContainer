@@ -13,19 +13,19 @@ template <typename T>
 class MyQueue
 {
 public:
-	MyQueue();
+	MyQueue() noexcept;
 	MyQueue(const MyQueue& rhs);
-	MyQueue(MyQueue&& rhs);
-	~MyQueue();
+	MyQueue(MyQueue&& rhs) noexcept;
+	~MyQueue() noexcept;
 
 	MyQueue<T>& operator=(const MyQueue& rhs);
 	MyQueue<T>& operator=(MyQueue&& rhs);
 
-	bool empty();
-	size_t size();
+	bool empty() const;
+	size_t size() const;
 	void enqueue(const T& value);
 	void dequeue();
-	T peek();
+	T peek() const;
 
 private:
 	MyList<T> m_list;
@@ -85,13 +85,13 @@ inline MyQueue<T>& MyQueue<T>::operator=(MyQueue&& rhs)
 }
 
 template<typename T>
-inline bool MyQueue<T>::empty()
+inline bool MyQueue<T>::empty() const
 {
 	return false;
 }
 
 template<typename T>
-inline size_t MyQueue<T>::size()
+inline size_t MyQueue<T>::size() const
 {
 	return size_t();
 }
@@ -107,7 +107,7 @@ inline void MyQueue<T>::dequeue()
 }
 
 template<typename T>
-inline T MyQueue<T>::peek()
+inline T MyQueue<T>::peek() const
 {
 	return T();
 }
