@@ -123,9 +123,11 @@ inline MyList<T>::MyList() noexcept
 	, m_tail(new Node)
 	, m_size(0)
 {
+	m_head->m_data = 0;
 	m_head->m_prev = nullptr;
 	m_head->m_next = m_tail;
 
+	m_tail->m_data = 0;
 	m_tail->m_prev = m_head;
 	m_tail->m_next = nullptr;
 }
@@ -140,33 +142,36 @@ inline MyList<T>::MyList(const MyList& rhs)
 	 *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
 	 */
 
-	if (m_head == nullptr)
+	if (rhs.m_head == nullptr)
 	{
 		MyList();
 		return;
 	}
 
-	Node* nowNode = rhs.m_head;
-	Node* newNode = new Node;
+	m_head = new Node;
+	m_head->m_data = 0;
+	m_head->m_prev = nullptr;
 
-	while(nowNode != nullptr)
+	m_tail = new Node;
+	m_tail->m_data = 0;
+	m_tail->m_next = nullptr;
+
+	Node* temp = m_head;
+	Node* nowNode = rhs.m_head->m_next;
+	while (nowNode->m_next != nullptr)
 	{
+		Node* newNode = new Node;
 		newNode->m_data = nowNode->m_data;
-		newNode->m_prev = nowNode->m_prev;
-		newNode->m_next = nowNode->m_next;
-
-		if (m_head == nullptr)
-		{
-			m_head = new Node();
-			m_head->m_prev = nullptr;
-			m_head->m_next = newNode;
-		}
+		
+		temp->m_next = newNode;
+		newNode->m_prev = temp;
+		temp = newNode;
 
 		nowNode = nowNode->m_next;
 	}
 
-	m_tail->m_prev = newNode;
-	m_tail->m_next = nullptr;
+	temp->m_next = m_tail;
+	m_tail->m_prev = temp;
 }
 
 template<typename T>
@@ -312,7 +317,7 @@ inline typename MyList<T>::iterator MyList<T>::begin() const
 template<typename T>
 inline typename MyList<T>::iterator MyList<T>::end() const
 {
-	return iterator(m_tail);
+	return iterator(m_tail->m_prev);
 }
 
 template<typename T>

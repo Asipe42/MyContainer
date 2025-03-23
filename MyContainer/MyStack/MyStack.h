@@ -23,7 +23,7 @@ public:
 
 	bool empty() const;
 	size_t size() const;
-	T& top() const;
+	T top() const;
 	void push(const T& value);
 	void pop();
 
@@ -36,7 +36,7 @@ template<typename T>
 inline MyStack<T>::MyStack()
 	: m_size(0)
 {
-	m_list = MyList<T>;
+	m_list = MyList<T>();
 }
 
 template<typename T>
@@ -116,7 +116,7 @@ inline size_t MyStack<T>::size() const
 }
 
 template<typename T>
-inline T& MyStack<T>::top() const
+inline T MyStack<T>::top() const
 {
 	return m_list.back();
 }
