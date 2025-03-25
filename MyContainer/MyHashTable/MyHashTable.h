@@ -2,6 +2,7 @@
 
 #pragma once
 #include <memory>
+#include <tuple>
 #include "../MyList/MyList.h"
 #include "../MyVector/MyVector.h"
 
@@ -37,7 +38,7 @@ public:
 	void clear();
 
 private:
-	size_t hash_function() const;
+	size_t hash_function(T1 Key) const;
 
 	MyVector<MyList<std::tuple<T1, T2>>> m_buckets;
 	size_t m_size;
@@ -124,6 +125,24 @@ inline size_t MyHashTable<T1, T2>::size() const
 template<typename T1, typename T2>
 inline T2 MyHashTable<T1, T2>::find(T1 key) const
 {
+	size_t index = hash_function(key);
+
+	if (m_buckets.size() <= index)
+	{
+		return T2();
+	}
+
+	typename MyList<std::tuple<T1, T2>>::iterator it = m_buckets[index].begin();
+	while (it != nullptr)
+	{
+		std::tuple<T1, T2> data = *it;
+		if (std::get<0>(data) == key)
+		{
+			return std::get<1>(data);
+		}
+		it++;
+	}
+
 	return T2();
 }
 
@@ -154,7 +173,7 @@ inline void MyHashTable<T1, T2>::clear()
 }
 
 template<typename T1, typename T2>
-inline size_t MyHashTable<T1, T2>::hash_function() const
+inline size_t MyHashTable<T1, T2>::hash_function(T1 Key) const
 {
 	return size_t();
 }
