@@ -104,6 +104,7 @@ public:
 	
 	void insert(iterator iter, const T& value);
 	void erase(iterator iter);
+	iterator find(T value);
 
 private:
 	struct Node
@@ -439,4 +440,20 @@ inline void MyList<T>::erase(iterator iter)
 	delete target;
 
 	m_size--;
+}
+
+template<typename T>
+inline typename MyList<T>::iterator MyList<T>::find(T value)
+{
+	MyList<T>::iterator it = begin();
+	while (it != nullptr)
+	{
+		Node* node = &it;
+		if (node->m_data == value)
+		{
+			return it;
+		}
+	}
+
+	return it;
 }
