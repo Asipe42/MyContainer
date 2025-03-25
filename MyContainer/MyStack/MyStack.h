@@ -137,6 +137,11 @@ inline void MyStack<T>::pop()
 		return;
 	}
 
-	m_list.erase(m_list.end());
+	/*
+	 * 주의
+	 *	- begin()은 첫 번째 유효 데이터
+	 *	- end()는 tail이다.
+	 */
+	m_list.erase(m_list.erase() - 1);
 	m_size = m_list.size();
 }

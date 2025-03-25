@@ -324,7 +324,7 @@ inline typename MyList<T>::iterator MyList<T>::begin() const
 template<typename T>
 inline typename MyList<T>::iterator MyList<T>::end() const
 {
-	return iterator(m_tail->m_prev);
+	return iterator(m_tail);
 }
 
 template<typename T>
