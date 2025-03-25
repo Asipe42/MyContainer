@@ -244,6 +244,7 @@ inline void MyHashTable<key_type, value_type>::erase(key_type key)
 		if (std::get<0>(*it) == key)
 		{
 			m_buckets[hash].erase(it);
+			m_size--;
 			return;
 		}
 	}
@@ -252,6 +253,17 @@ inline void MyHashTable<key_type, value_type>::erase(key_type key)
 template<typename key_type, typename value_type>
 inline void MyHashTable<key_type, value_type>::clear()
 {
+	if (empty())
+	{
+		return;
+	}
+
+	for (int i = 0; i < capacity; i++)
+	{
+		m_buckets[i].clear();
+	}
+
+	m_size = 0;
 }
 
 template<typename key_type, typename value_type>
