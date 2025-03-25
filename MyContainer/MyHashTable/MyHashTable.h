@@ -112,13 +112,13 @@ inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(MyHashTable&& rhs)
 template<typename T1, typename T2>
 inline bool MyHashTable<T1, T2>::empty() const
 {
-	return false;
+	return m_size == 0;
 }
 
 template<typename T1, typename T2>
 inline size_t MyHashTable<T1, T2>::size() const
 {
-	return size_t();
+	return m_size;
 }
 
 template<typename T1, typename T2>
