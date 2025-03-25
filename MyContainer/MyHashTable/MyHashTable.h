@@ -14,7 +14,7 @@
  *	- 충돌은 '체이닝(Chaining)' 방식으로 처리한다.
  */
 
-template <typename T1, typename T2>
+template <typename key_type, typename value_type>
 class MyHashTable
 {
 public:
@@ -23,36 +23,36 @@ public:
 	MyHashTable(MyHashTable&& rhs) noexcept;
 	~MyHashTable() noexcept;
 
-	MyHashTable<T1, T2>& operator=(const MyHashTable& rhs);
-	MyHashTable<T1, T2>& operator=(MyHashTable&& rhs);
+	MyHashTable<key_type, value_type>& operator=(const MyHashTable& rhs);
+	MyHashTable<key_type, value_type>& operator=(MyHashTable&& rhs);
 
 	bool empty() const;
 	size_t size() const;
 
-	T2 find(T1 key) const;
-	size_t count() const;
+	value_type find(key_type key) const;
+	size_t count(key_type key) const;
 
-	void emplace(T1 key, T2 value);
-	void insert(T1 key, T2 value);
-	void erase(T1 key);
+	void emplace(key_type key, value_type value);
+	void insert(key_type key, value_type value);
+	void erase(key_type key);
 	void clear();
 
 private:
-	size_t hash_function(T1 Key) const;
+	size_t hash_function(key_type Key) const;
 
-	MyVector<MyList<std::tuple<T1, T2>>> m_buckets;
+	MyVector<MyList<std::tuple<key_type, value_type>>> m_buckets;
 	size_t m_size;
 };
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>::MyHashTable() noexcept
-	: m_buckets(MyVector<MyList<std::tuple<T1, T2>>>())
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>::MyHashTable() noexcept
+	: m_buckets(MyVector<MyList<std::tuple<key_type, value_type>>>())
 	, m_size(0)
 {
 }
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>::MyHashTable(const MyHashTable& rhs)
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>::MyHashTable(const MyHashTable& rhs)
 	: m_buckets(rhs.m_buckets)
 	, m_size(rhs.m_size)
 {
@@ -63,8 +63,8 @@ inline MyHashTable<T1, T2>::MyHashTable(const MyHashTable& rhs)
 	 */
 }
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>::MyHashTable(MyHashTable&& rhs) noexcept
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>::MyHashTable(MyHashTable&& rhs) noexcept
 	: m_buckets(std::move(rhs.m_buckets))
 	, m_size(rhs.m_size)
 {
@@ -77,13 +77,13 @@ inline MyHashTable<T1, T2>::MyHashTable(MyHashTable&& rhs) noexcept
 	m_size = 0;
 }
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>::~MyHashTable() noexcept
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>::~MyHashTable() noexcept
 {
 }
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(const MyHashTable& rhs)
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>& MyHashTable<key_type, value_type>::operator=(const MyHashTable& rhs)
 {
 	/*
 	 * 복사 대입	연산자
@@ -95,8 +95,8 @@ inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(const MyHashTable& rh
 	m_size = rhs.m_size;
 }
 
-template<typename T1, typename T2>
-inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(MyHashTable&& rhs)
+template<typename key_type, typename value_type>
+inline MyHashTable<key_type, value_type>& MyHashTable<key_type, value_type>::operator=(MyHashTable&& rhs)
 {
 	/*
 	 * 이동 대입 연산자
@@ -110,32 +110,32 @@ inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(MyHashTable&& rhs)
 	rhs.m_size = 0;
 }
 
-template<typename T1, typename T2>
-inline bool MyHashTable<T1, T2>::empty() const
+template<typename key_type, typename value_type>
+inline bool MyHashTable<key_type, value_type>::empty() const
 {
 	return m_size == 0;
 }
 
-template<typename T1, typename T2>
-inline size_t MyHashTable<T1, T2>::size() const
+template<typename key_type, typename value_type>
+inline size_t MyHashTable<key_type, value_type>::size() const
 {
 	return m_size;
 }
 
-template<typename T1, typename T2>
-inline T2 MyHashTable<T1, T2>::find(T1 key) const
+template<typename key_type, typename value_type>
+inline value_type MyHashTable<key_type, value_type>::find(key_type key) const
 {
 	size_t index = hash_function(key);
 
 	if (m_buckets.size() <= index)
 	{
-		return T2();
+		return value_type();
 	}
 
-	typename MyList<std::tuple<T1, T2>>::iterator it = m_buckets[index].begin();
+	typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[index].begin();
 	while (it != nullptr)
 	{
-		std::tuple<T1, T2> data = *it;
+		std::tuple<key_type, value_type> data = *it;
 		if (std::get<0>(data) == key)
 		{
 			return std::get<1>(data);
@@ -143,37 +143,44 @@ inline T2 MyHashTable<T1, T2>::find(T1 key) const
 		it++;
 	}
 
-	return T2();
+	return value_type();
 }
 
-template<typename T1, typename T2>
-inline size_t MyHashTable<T1, T2>::count() const
+template<typename key_type, typename value_type>
+inline size_t MyHashTable<key_type, value_type>::count(key_type key) const
 {
-	return size_t();
+	size_t index = hash_function(key);
+
+	if (m_buckets.size() <= index)
+	{
+		return size_t();
+	}
+
+	return m_buckets[index].size();
 }
 
-template<typename T1, typename T2>
-inline void MyHashTable<T1, T2>::emplace(T1 key, T2 value)
-{
-}
-
-template<typename T1, typename T2>
-inline void MyHashTable<T1, T2>::insert(T1 key, T2 value)
-{
-}
-
-template<typename T1, typename T2>
-inline void MyHashTable<T1, T2>::erase(T1 key)
+template<typename key_type, typename value_type>
+inline void MyHashTable<key_type, value_type>::emplace(key_type key, value_type value)
 {
 }
 
-template<typename T1, typename T2>
-inline void MyHashTable<T1, T2>::clear()
+template<typename key_type, typename value_type>
+inline void MyHashTable<key_type, value_type>::insert(key_type key, value_type value)
 {
 }
 
-template<typename T1, typename T2>
-inline size_t MyHashTable<T1, T2>::hash_function(T1 Key) const
+template<typename key_type, typename value_type>
+inline void MyHashTable<key_type, value_type>::erase(key_type key)
+{
+}
+
+template<typename key_type, typename value_type>
+inline void MyHashTable<key_type, value_type>::clear()
+{
+}
+
+template<typename key_type, typename value_type>
+inline size_t MyHashTable<key_type, value_type>::hash_function(key_type Key) const
 {
 	return size_t();
 }
