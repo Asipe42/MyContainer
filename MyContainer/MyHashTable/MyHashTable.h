@@ -64,7 +64,16 @@ inline MyHashTable<T1, T2>::MyHashTable(const MyHashTable& rhs)
 
 template<typename T1, typename T2>
 inline MyHashTable<T1, T2>::MyHashTable(MyHashTable&& rhs) noexcept
+	: m_buckets(std::move(rhs.m_buckets))
+	, m_size(rhs.m_size)
 {
+	/*
+	 * 이동 생성자
+	 *	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
+	 *  - rvalue는 임시 객체를 의미한다.
+	 */
+
+	m_size = 0;
 }
 
 template<typename T1, typename T2>
