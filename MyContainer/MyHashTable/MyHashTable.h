@@ -269,5 +269,5 @@ inline void MyHashTable<key_type, value_type>::clear()
 template<typename key_type, typename value_type>
 inline size_t MyHashTable<key_type, value_type>::hash_function(key_type Key) const
 {
-	return size_t();
+	return std::hash<key_type>{ } (Key) % capacity;
 }
