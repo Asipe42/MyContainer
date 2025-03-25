@@ -134,9 +134,9 @@ inline size_t MyHashTable<key_type, value_type>::size() const
 template<typename key_type, typename value_type>
 inline value_type MyHashTable<key_type, value_type>::find(key_type key) const
 {
-	size_t index = hash_function(key);
+	size_t hash = hash_function(key);
 
-	if (capacity <= index)
+	if (capacity <= hash)
 	{
 		return value_type();
 	}
@@ -149,14 +149,14 @@ inline value_type MyHashTable<key_type, value_type>::find(key_type key) const
 	 *	C. A가 아니면서 탐색에 실패한 경우
 	 */
 
-	if (m_buckets[index].empty())
+	if (m_buckets[hash].empty())
 	{
 		// Case A
 		return value_type();
 	}
 	
-	typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[index].begin();
-	while (it != m_buckets[index].end())
+	typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[hash].begin();
+	while (it != m_buckets[hash].end())
 	{
 		std::tuple<key_type, value_type> data = *it;
 		if (std::get<0>(data) == key)
@@ -174,22 +174,22 @@ inline value_type MyHashTable<key_type, value_type>::find(key_type key) const
 template<typename key_type, typename value_type>
 inline size_t MyHashTable<key_type, value_type>::count(key_type key) const
 {
-	size_t index = hash_function(key);
+	size_t hash = hash_function(key);
 
-	if (capacity <= index)
+	if (capacity <= hash)
 	{
 		return size_t();
 	}
 
-	return m_buckets[index].size();
+	return m_buckets[hash].size();
 }
 
 template<typename key_type, typename value_type>
 inline void MyHashTable<key_type, value_type>::insert(key_type key, value_type value)
 {
-	size_t index = hash_function(key);
+	size_t hash = hash_function(key);
 
-	if (capacity <= index)
+	if (capacity <= hash)
 	{
 		throw std::out_of_range("Index out of range");
 	}
@@ -204,10 +204,10 @@ inline void MyHashTable<key_type, value_type>::insert(key_type key, value_type v
 	 *		- 노드 추가
 	 */
 	
-	if (m_buckets[index].empty() == false)
+	if (m_buckets[hash].empty() == false)
 	{
-		typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[index].begin();
-		while (it != m_buckets[index].end())
+		typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[hash].begin();
+		while (it != m_buckets[hash].end())
 		{
 			if (std::get<0>(*it) == key)
 			{
@@ -220,13 +220,33 @@ inline void MyHashTable<key_type, value_type>::insert(key_type key, value_type v
 	}
 	
 	// Case A, C
-	m_buckets[index].push_back(std::make_tuple(key, value));
+	m_buckets[hash].push_back(std::make_tuple(key, value));
 	m_size++;
 }
 
 template<typename key_type, typename value_type>
 inline void MyHashTable<key_type, value_type>::erase(key_type key)
 {
+	if (empty())
+	{
+		return;
+	}
+
+	size_t hash = hash_function(key);
+	if (m_buckets[hash].empty())
+	{
+		return;
+	}
+
+	typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[hash].begin();
+	while (it != m_buckets[hash].end())
+	{
+		if (std::get<0>(*it) == key)
+		{
+			m_buckets[hash].erase(it);
+			return;
+		}
+	}
 }
 
 template<typename key_type, typename value_type>
