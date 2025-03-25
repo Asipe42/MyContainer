@@ -52,7 +52,14 @@ inline MyHashTable<T1, T2>::MyHashTable() noexcept
 
 template<typename T1, typename T2>
 inline MyHashTable<T1, T2>::MyHashTable(const MyHashTable& rhs)
+	: m_buckets(rhs.m_buckets)
+	, m_size(rhs.m_size)
 {
+	/*
+	 * 복사 생성자
+	 *	- 깊은 복사를 수행한다.
+	 *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
+	 */
 }
 
 template<typename T1, typename T2>
