@@ -32,5 +32,8 @@
     <ClInclude Include="MyQueue\MyQueue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MyHashTable\MyHashTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

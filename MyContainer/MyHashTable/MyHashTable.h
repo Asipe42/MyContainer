@@ -38,7 +38,7 @@ public:
 private:
 	size_t hash_function() const;
 
-	MyList<std::tuple<T1, T2>>[] m_buckets;
+	MyList<std::tuple<T1, T2>> m_buckets[];
 	size_t m_size;
 };
 
