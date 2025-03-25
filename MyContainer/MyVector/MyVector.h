@@ -2,6 +2,7 @@
 
 #pragma once
 #include <memory>
+#include <stdexcept>
 
 /*
  * 동적 배열
@@ -155,6 +156,11 @@ inline MyVector<T>& MyVector<T>::operator=(MyVector&& rhs)
 template<typename T>
 inline T& MyVector<T>::operator[](size_t index) const
 {
+	if (m_size <= index)
+	{
+		throw std::out_of_range("Index out of range");
+	}
+	
 	return m_arr[index];
 }
 
