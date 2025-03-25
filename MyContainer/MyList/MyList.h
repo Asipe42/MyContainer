@@ -403,7 +403,7 @@ inline void MyList<T>::pop_back()
 	Node* lastNode = m_tail->m_prev;
 
 	m_tail->m_prev = lastNode->m_prev;
-	lastNode->m_prev->m_prev = m_tail;
+	lastNode->m_prev->m_next = m_tail;
 
 	delete lastNode;
 
