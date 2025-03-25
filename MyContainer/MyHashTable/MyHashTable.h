@@ -14,10 +14,14 @@
  *	- 충돌은 '체이닝(Chaining)' 방식으로 처리한다.
  */
 
+
+
 template <typename key_type, typename value_type>
 class MyHashTable
 {
 public:
+	static const size_t capacity = 10;
+	
 	MyHashTable() noexcept;
 	MyHashTable(const MyHashTable& rhs);
 	MyHashTable(MyHashTable&& rhs) noexcept;
@@ -32,35 +36,40 @@ public:
 	value_type find(key_type key) const;
 	size_t count(key_type key) const;
 
-	void emplace(key_type key, value_type value);
 	void insert(key_type key, value_type value);
 	void erase(key_type key);
 	void clear();
 
 private:
 	size_t hash_function(key_type Key) const;
-
-	MyVector<MyList<std::tuple<key_type, value_type>>> m_buckets;
+	MyList<std::tuple<key_type, value_type>> m_buckets[capacity];
 	size_t m_size;
 };
 
 template<typename key_type, typename value_type>
 inline MyHashTable<key_type, value_type>::MyHashTable() noexcept
-	: m_buckets(MyVector<MyList<std::tuple<key_type, value_type>>>())
-	, m_size(0)
+	: m_size(0)
 {
+	for (int i = 0; i < capacity; i++)
+	{
+		m_buckets[i] = MyList<std::tuple<key_type, value_type>>();
+	}
 }
 
 template<typename key_type, typename value_type>
 inline MyHashTable<key_type, value_type>::MyHashTable(const MyHashTable& rhs)
-	: m_buckets(rhs.m_buckets)
-	, m_size(rhs.m_size)
+	: m_size(rhs.m_size)
 {
 	/*
 	 * 복사 생성자
 	 *	- 깊은 복사를 수행한다.
 	 *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
 	 */
+
+	for (size_t i = 0; i < capacity; ++i)
+	{
+		m_buckets[i] = rhs.m_buckets[i];
+	}
 }
 
 template<typename key_type, typename value_type>
@@ -127,22 +136,38 @@ inline value_type MyHashTable<key_type, value_type>::find(key_type key) const
 {
 	size_t index = hash_function(key);
 
-	if (m_buckets.size() <= index)
+	if (capacity <= index)
 	{
 		return value_type();
 	}
 
+	/*
+	 * 시나리오
+	 *	A. 리스트가 비어있는 경우
+	 *		- 기본 값 반환
+	 *	B. A가 아니면서 탐색에 성공한 경우
+	 *	C. A가 아니면서 탐색에 실패한 경우
+	 */
+
+	if (m_buckets[index].empty())
+	{
+		// Case A
+		return value_type();
+	}
+	
 	typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[index].begin();
-	while (it != nullptr)
+	while (it != m_buckets[index].end())
 	{
 		std::tuple<key_type, value_type> data = *it;
 		if (std::get<0>(data) == key)
 		{
+			// Case B
 			return std::get<1>(data);
 		}
 		it++;
 	}
 
+	// Case C
 	return value_type();
 }
 
@@ -151,7 +176,7 @@ inline size_t MyHashTable<key_type, value_type>::count(key_type key) const
 {
 	size_t index = hash_function(key);
 
-	if (m_buckets.size() <= index)
+	if (capacity <= index)
 	{
 		return size_t();
 	}
@@ -160,13 +185,43 @@ inline size_t MyHashTable<key_type, value_type>::count(key_type key) const
 }
 
 template<typename key_type, typename value_type>
-inline void MyHashTable<key_type, value_type>::emplace(key_type key, value_type value)
-{
-}
-
-template<typename key_type, typename value_type>
 inline void MyHashTable<key_type, value_type>::insert(key_type key, value_type value)
 {
+	size_t index = hash_function(key);
+
+	if (capacity <= index)
+	{
+		throw std::out_of_range("Index out of range");
+	}
+
+	/*
+	 * 시나리오
+	 *	A. 리스트가 비어있는 경우
+	 *		- 노드 추가
+	 *	B. A가 아니면서 이미 동일한 키 값이 존재하는 경우
+	 *		- 노드를 찾아서 값을 갱신
+	 *	C. A가 아니면서 키가 존재하지 않는 경우
+	 *		- 노드 추가
+	 */
+	
+	if (m_buckets[index].empty() == false)
+	{
+		typename MyList<std::tuple<key_type, value_type>>::iterator it = m_buckets[index].begin();
+		while (it != m_buckets[index].end())
+		{
+			if (std::get<0>(*it) == key)
+			{
+				// Case B
+				*it = std::make_tuple(key, value);
+				return;
+			}
+			it++;
+		}
+	}
+	
+	// Case A, C
+	m_buckets[index].push_back(std::make_tuple(key, value));
+	m_size++;
 }
 
 template<typename key_type, typename value_type>
