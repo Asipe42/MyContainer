@@ -455,7 +455,7 @@ template<typename T>
 inline typename MyList<T>::iterator MyList<T>::find(T value)
 {
 	MyList<T>::iterator it = begin();
-	while (it != nullptr)
+	while (it != m_tail)
 	{
 		Node* node = &it;
 		if (node->m_data == value)
@@ -466,5 +466,5 @@ inline typename MyList<T>::iterator MyList<T>::find(T value)
 		it++;
 	}
 
-	return it;
+	return nullptr;
 }
