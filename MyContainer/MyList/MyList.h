@@ -2,6 +2,7 @@
 
 #pragma once
 #include <memory>
+#include <tuple>
 
 /*
  * 연결 리스트
@@ -123,11 +124,9 @@ inline MyList<T>::MyList() noexcept
 	, m_tail(new Node)
 	, m_size(0)
 {
-	m_head->m_data = 0;
 	m_head->m_prev = nullptr;
 	m_head->m_next = m_tail;
 
-	m_tail->m_data = 0;
 	m_tail->m_prev = m_head;
 	m_tail->m_next = nullptr;
 }
@@ -149,11 +148,9 @@ inline MyList<T>::MyList(const MyList& rhs)
 	}
 
 	m_head = new Node;
-	m_head->m_data = 0;
 	m_head->m_prev = nullptr;
 
 	m_tail = new Node;
-	m_tail->m_data = 0;
 	m_tail->m_next = nullptr;
 
 	Node* temp = m_head;
