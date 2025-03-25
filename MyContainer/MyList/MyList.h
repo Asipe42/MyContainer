@@ -194,7 +194,7 @@ template<typename T>
 inline MyList<T>::~MyList() noexcept
 {
 	Node* nowNode = m_head;
-	for (int i = 0; i < m_size; i++)
+	while (nowNode->m_next != nullptr)
 	{
 		Node* nextNode = nowNode->m_next;
 		delete nowNode;
@@ -217,7 +217,7 @@ inline MyList<T>& MyList<T>::operator=(const MyList& rhs)
 	}
 
 	Node* nowNode = m_head;
-	while (nowNode != nullptr)
+	while (nowNode != m_tail)
 	{
 		Node* nextNode = nowNode->m_next;
 		delete nowNode;
