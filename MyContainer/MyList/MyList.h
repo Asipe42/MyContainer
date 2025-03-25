@@ -453,6 +453,8 @@ inline typename MyList<T>::iterator MyList<T>::find(T value)
 		{
 			return it;
 		}
+
+		it++;
 	}
 
 	return it;
