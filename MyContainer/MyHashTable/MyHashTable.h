@@ -84,13 +84,24 @@ inline MyHashTable<T1, T2>::~MyHashTable() noexcept
 template<typename T1, typename T2>
 inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(const MyHashTable& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	/*
+	 * 복사 대입	연산자
+	 *	- 복사 생성자와 비슷하게 동작한다.
+	 *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
+
+	m_buckets = rhs.m_buckets;
+	m_size = rhs.m_size;
 }
 
 template<typename T1, typename T2>
 inline MyHashTable<T1, T2>& MyHashTable<T1, T2>::operator=(MyHashTable&& rhs)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
+	/*
+	 * 이동 대입 연산자
+	 *	- 이동 생성자와 비슷하게 동작한다.
+	 *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+	 */
 }
 
 template<typename T1, typename T2>
