@@ -3,6 +3,7 @@
 #pragma once
 #include <memory>
 #include "../MyList/MyList.h"
+#include "../MyVector/MyVector.h"
 
 /*
  * 해시 테이블
@@ -38,12 +39,14 @@ public:
 private:
 	size_t hash_function() const;
 
-	MyList<std::tuple<T1, T2>> m_buckets[];
+	MyVector<MyList<std::tuple<T1, T2>>> m_buckets;
 	size_t m_size;
 };
 
 template<typename T1, typename T2>
 inline MyHashTable<T1, T2>::MyHashTable() noexcept
+	: m_buckets(MyVector<MyList<std::tuple<T1, T2>>>())
+	, m_size(0)
 {
 }
 
