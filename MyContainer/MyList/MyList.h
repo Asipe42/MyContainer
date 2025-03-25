@@ -229,21 +229,25 @@ inline MyList<T>& MyList<T>::operator=(const MyList& rhs)
 		nowNode = nextNode;
 	}
 
+	m_head = new Node();
+	m_tail = new Node();
+	
 	nowNode = rhs.m_head;
 	Node* newNode = new Node;
 
-	while (nowNode != nullptr)
+	while (nowNode->m_next != nullptr)
 	{
 		newNode->m_data = nowNode->m_data;
 		newNode->m_prev = nowNode->m_prev;
 		newNode->m_next = nowNode->m_next;
 
-		if (m_head == nullptr)
+		if (m_head->m_next == nullptr)
 		{
-			m_head = new Node();
 			m_head->m_prev = nullptr;
 			m_head->m_next = newNode;
 		}
+
+		nowNode = nowNode->m_next;
 	}
 
 	m_tail->m_prev = newNode;
