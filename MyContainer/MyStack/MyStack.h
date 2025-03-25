@@ -26,6 +26,7 @@ public:
 	T top() const;
 	void push(const T& value);
 	void pop();
+	void clear();
 
 private:
 	MyList<T> m_list;
@@ -144,4 +145,11 @@ inline void MyStack<T>::pop()
 	 */
 	m_list.erase(m_list.erase() - 1);
 	m_size = m_list.size();
+}
+
+template <typename T>
+void MyStack<T>::clear()
+{
+	m_list.clear();
+	m_size = 0;
 }
