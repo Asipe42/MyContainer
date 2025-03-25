@@ -26,7 +26,9 @@ public:
 	void enqueue(const T& value);
 	void dequeue();
 	T peek() const;
+	void clear();
 
+	
 private:
 	MyList<T> m_list;
 	size_t m_size;
@@ -138,4 +140,11 @@ template<typename T>
 inline T MyQueue<T>::peek() const
 {
 	return m_list.back();
+}
+
+template <typename T>
+void MyQueue<T>::clear()
+{
+	m_list.clear();
+	m_size = 0;
 }
