@@ -481,4 +481,5 @@ void MyList<T>::clear()
 	
 	m_head->m_next = nullptr;
 	m_tail->m_prev = nullptr;
+	m_size = 0;
 }
