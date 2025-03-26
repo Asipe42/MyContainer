@@ -106,11 +106,13 @@ MyHeap<T>& MyHeap<T>::operator=(MyHeap&& rhs) noexcept
 template <typename T>
 bool MyHeap<T>::empty() const
 {
+    return m_size == 0;
 }
 
 template <typename T>
 size_t MyHeap<T>::size() const
 {
+    return m_size;
 }
 
 template <typename T>
