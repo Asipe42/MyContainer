@@ -152,6 +152,8 @@ T MyHeap<T>::top() const
 template <typename T>
 void MyHeap<T>::push(T value)
 {
+    m_vector.push_back(value);
+    heapify_up(m_vector.size() - 1);
 }
 
 template <typename T>
