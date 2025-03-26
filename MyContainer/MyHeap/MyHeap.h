@@ -152,6 +152,11 @@ T MyHeap<T>::top() const
 template <typename T>
 void MyHeap<T>::push(T value)
 {
+    /*
+     * 설명
+     *  - 노드를 생성하고(push_back), 힙 속성을 유지하기 위해 부모 방향으로 버블링한다.
+     */
+    
     m_vector.push_back(value);
     heapify_up(m_vector.size() - 1);
 }
@@ -159,6 +164,14 @@ void MyHeap<T>::push(T value)
 template <typename T>
 void MyHeap<T>::pop()
 {
+    /*
+     * 설명
+     *  - 리프 노드를 루트에 두고, 힙 속성을 유지하기 위해 자식 방향으로 버블링 한다.
+     */
+    
+    m_vector[0] = m_vector.back();
+    m_vector.pop_back();
+    heapify_down(0);
 }
 
 template <typename T>
