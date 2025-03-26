@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyHashTable\MyHashTable.h" />
+    <ClInclude Include="MyHeap\MyHeap.h" />
     <ClInclude Include="MyList\MyList.h" />
     <ClInclude Include="MyQueue\MyQueue.h" />
     <ClInclude Include="MyStack\MyStack.h" />
