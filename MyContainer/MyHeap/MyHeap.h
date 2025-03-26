@@ -39,6 +39,8 @@ private:
 
 template <typename T>
 MyHeap<T>::MyHeap() noexcept
+    : m_vector(MyVector<T>())
+    , m_size(0)
 {
 }
 
@@ -63,7 +65,7 @@ MyHeap<T>& MyHeap<T>::operator=(const MyHeap& rhs)
 }
 
 template <typename T>
-MyHeap<T>& MyHeap<T>::operator=(MyHeap&& rhs)
+MyHeap<T>& MyHeap<T>::operator=(MyHeap&& rhs) noexcept
 {
 }
 
