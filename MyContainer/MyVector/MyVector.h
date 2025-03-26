@@ -243,6 +243,7 @@ inline void MyVector<T>::push_back(const T& value)
 
 	int index = m_size;
 	m_arr[index] = value;
+	m_size++;
 }
 
 template<typename T>
