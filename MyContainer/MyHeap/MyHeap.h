@@ -11,6 +11,23 @@
  *	- 구현은 [Max Heap]으로 한다.
  */
 
+/*
+ * 완전 이진 트리
+ *  - 아래의 두 가지 조건을 충족하는 이진 트리이다.
+ *      1. 마지막 레벨을 제외한 나머지 레벨에서 모든 노드가 채워져 있을 것
+ *      2. 노드의 추가는 왼쪽에서 오른쪽으로 이루어질 것
+ */
+
+/*
+ * 이진 트리
+ *  - 부모가 최대 2개의 자식을 가질 수 있는 트리이다.
+ */
+
+/*
+ * 트리
+ *  - 노드 간의 연결이 계층적으로 이루어진 그래프
+ */
+
 template <typename T>
 class MyHeap
 {
@@ -26,13 +43,19 @@ public:
     bool empty() const;
     size_t size() const;
     T top() const;
-    void push();
+    void push(T value);
     void pop();
     
 private:
     void heapify_up(size_t index);
     void heapify_down(size_t index);
-    
+
+    /*
+     * 인덱스 추론
+     *  - 부모 노드: (자식 노드의 인덱스 - 2) / 2
+     *  - 왼쪽 자식 노드: (부모 노드의 인덱스 * 2) + 1
+     *  - 오른쪽 자식 노드: (부모 노드의 인덱스 * 2) + 2
+     */
     MyVector<T> m_vector;
     size_t m_size;
 };
@@ -127,7 +150,7 @@ T MyHeap<T>::top() const
 }
 
 template <typename T>
-void MyHeap<T>::push()
+void MyHeap<T>::push(T value)
 {
 }
 
