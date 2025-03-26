@@ -52,7 +52,7 @@ private:
 
     /*
      * 인덱스 추론
-     *  - 부모 노드: (자식 노드의 인덱스 - 2) / 2
+     *  - 부모 노드: (자식 노드의 인덱스 - 1) / 2
      *  - 왼쪽 자식 노드: (부모 노드의 인덱스 * 2) + 1
      *  - 오른쪽 자식 노드: (부모 노드의 인덱스 * 2) + 2
      */
@@ -158,6 +158,8 @@ void MyHeap<T>::push(T value)
      */
     
     m_vector.push_back(value);
+    m_size = m_vector.size();
+    
     heapify_up(m_vector.size() - 1);
 }
 
@@ -171,12 +173,30 @@ void MyHeap<T>::pop()
     
     m_vector[0] = m_vector.back();
     m_vector.pop_back();
+    m_size = m_vector.size();
+    
     heapify_down(0);
 }
 
 template <typename T>
 void MyHeap<T>::heapify_up(size_t index)
 {
+    /*
+     * 설명
+     *  - 자신과 부모를 비교하여 버블링한다.
+     */
+
+    if (index == 0)
+    {
+        return;
+    }
+    
+    size_t parent = (index - 1) / 2;
+    if (m_vector[parent] < m_vector[index])
+    {
+        std::swap(m_vector[index], m_vector[parent]);
+        heapify_up(parent);
+    }
 }
 
 template <typename T>
