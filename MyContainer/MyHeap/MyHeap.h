@@ -46,6 +46,8 @@ MyHeap<T>::MyHeap() noexcept
 
 template <typename T>
 MyHeap<T>::MyHeap(const MyHeap& rhs)
+    : m_vector(rhs.m_vector)
+    , m_size(rhs.m_size)
 {
 }
 
