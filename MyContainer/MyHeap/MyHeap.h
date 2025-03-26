@@ -49,6 +49,11 @@ MyHeap<T>::MyHeap(const MyHeap& rhs)
     : m_vector(rhs.m_vector)
     , m_size(rhs.m_size)
 {
+    /*
+     * 복사 생성자
+     *	- 깊은 복사를 수행한다.
+     *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
+     */
 }
 
 template <typename T>
@@ -56,6 +61,12 @@ MyHeap<T>::MyHeap(MyHeap&& rhs) noexcept
     : m_vector(std::move(rhs.m_vector))
     , m_size(rhs.m_size)
 {
+    /*
+     * 이동 생성자
+     *	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
+     *  - rvalue는 임시 객체를 의미한다.
+     */
+    
     rhs.m_size = 0;
 }
 
@@ -67,6 +78,14 @@ MyHeap<T>::~MyHeap() noexcept
 template <typename T>
 MyHeap<T>& MyHeap<T>::operator=(const MyHeap& rhs)
 {
+    /*
+     * 복사 대입	연산자
+     *	- 복사 생성자와 비슷하게 동작한다.
+     *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+     */
+    
+    m_vector = rhs.m_vector;
+    m_size = rhs.m_size;
 }
 
 template <typename T>
