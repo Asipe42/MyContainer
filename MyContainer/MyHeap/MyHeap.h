@@ -118,6 +118,12 @@ size_t MyHeap<T>::size() const
 template <typename T>
 T MyHeap<T>::top() const
 {
+    if (empty())
+    {
+        return T();
+    }
+
+    return m_vector.front();
 }
 
 template <typename T>
