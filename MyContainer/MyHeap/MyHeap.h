@@ -202,4 +202,29 @@ void MyHeap<T>::heapify_up(size_t index)
 template <typename T>
 void MyHeap<T>::heapify_down(size_t index)
 {
+    /*
+     * 설명
+     *  - 자신과 자식들을 비교해, 우선순위가 높은 쪽으로 버블링한다.
+     */
+    
+    size_t left = index * 2 + 1;
+    size_t right = index * 2 + 2;
+    bool isSwap = false;
+    
+    if (left < m_size && m_vector[index] < m_vector[left])
+    {
+        std::swap(m_vector[index], m_vector[left]);
+        isSwap = true;
+    }
+
+    if (right < m_size && m_vector[index] < m_vector[right])
+    {
+        std::swap(m_vector[index], m_vector[right]);
+        isSwap = true;
+    }
+
+    if (isSwap)
+    {
+        heapify_down(right);
+    }
 }
