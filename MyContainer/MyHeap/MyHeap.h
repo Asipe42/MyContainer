@@ -53,7 +53,10 @@ MyHeap<T>::MyHeap(const MyHeap& rhs)
 
 template <typename T>
 MyHeap<T>::MyHeap(MyHeap&& rhs) noexcept
+    : m_vector(std::move(rhs.m_vector))
+    , m_size(rhs.m_size)
 {
+    rhs.m_size = 0;
 }
 
 template <typename T>
