@@ -209,22 +209,21 @@ void MyHeap<T>::heapify_down(size_t index)
     
     size_t left = index * 2 + 1;
     size_t right = index * 2 + 2;
-    bool isSwap = false;
-    
-    if (left < m_size && m_vector[index] < m_vector[left])
+    size_t largest = index;
+
+    if (left < m_size && m_vector[left] > m_vector[largest])
     {
-        std::swap(m_vector[index], m_vector[left]);
-        isSwap = true;
+        largest = left;
     }
 
-    if (right < m_size && m_vector[index] < m_vector[right])
+    if (right < m_size && m_vector[right] > m_vector[largest])
     {
-        std::swap(m_vector[index], m_vector[right]);
-        isSwap = true;
+        largest = right;
     }
 
-    if (isSwap)
+    if (largest != index)
     {
-        heapify_down(right);
+        std::swap(m_vector[index], m_vector[largest]);
+        heapify_down(largest);
     }
 }
