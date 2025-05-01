@@ -4,6 +4,12 @@ template <typename K, typename V>
 class MyMap
 {
 public:
+    enum NodeColor : uint8_t
+    {
+        Red = 0,
+        Black = 1,
+    };
+
     class MyIterator
     {
         
@@ -29,9 +35,22 @@ public:
     size_t size() const;
     bool empty() const;
 
-    class MyIterator;
     MyIterator begin();
     MyIterator end();
+
+private:
+    struct Node
+    {
+        K key;
+        V value;
+        NodeColor color;
+        Node* left;
+        Node* right;
+        Node* parent;
+
+        Node(K k, V v)
+            : key(k), value(v), color(NodeColor::Red), left(nullptr), right(nullptr), parent(nullptr) { } 
+    };
 };
 
 template <typename K, typename V>
