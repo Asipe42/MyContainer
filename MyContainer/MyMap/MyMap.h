@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "MyList/MyList.h"
 
 template <typename K, typename V>
 class MyMap
@@ -51,26 +52,54 @@ private:
         Node(K k, V v)
             : key(k), value(v), color(NodeColor::Red), left(nullptr), right(nullptr), parent(nullptr) { } 
     };
+
+    Node* copyTree(Node* node);
+    void clearTree(Node* node);
+
+    Node* root;
 };
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap() noexcept
+    : root(nullptr)
 {
 }
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(const MyMap& rhs)
+    : root(nullptr)
 {
+    /*
+     * 복사 생성자
+     *	- 깊은 복사를 수행한다.
+     *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
+     */
+    
+    if (rhs.root == nullptr)
+    {
+        return;
+    }
+
+    root = copyTree(rhs.root);
 }
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
+    : root(rhs.root)    // 값 타입임으로 복사해도 무관하다.
 {
+    /*
+     * 이동 생성자
+     *	- 이동 생성자는 rvalue에 대한 사본을 생성한다.
+     *  - rvalue는 임시 객체를 의미한다.
+     */
+    
+    rhs.root = nullptr; // 소유권 이전을 명확히 한다.
 }
 
 template <typename K, typename V>
 MyMap<K, V>::~MyMap() noexcept
 {
+    clear();
 }
 
 template <typename K, typename V>
@@ -116,6 +145,7 @@ bool MyMap<K, V>::count(K key) const
 template <typename K, typename V>
 void MyMap<K, V>::clear()
 {
+    clearTree(root);
 }
 
 template <typename K, typename V>
@@ -136,4 +166,44 @@ typename MyMap<K, V>::MyIterator MyMap<K, V>::begin()
 template <typename K, typename V>
 typename MyMap<K, V>::MyIterator MyMap<K, V>::end()
 {
+}
+
+template <typename K, typename V>
+typename MyMap<K, V>::Node* MyMap<K, V>::copyTree(Node* node)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+
+    Node* newNode = new Node(node->key, node->value);
+    newNode->left = copyTree(node->left);
+    newNode->right = copyTree(node->right);
+
+    if (newNode->left)
+    {
+        newNode->left->parent = newNode;
+    }
+
+    if (newNode->right)
+    {
+        newNode->right->parent = newNode;
+    }
+
+    return newNode;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::clearTree(Node* node)
+{
+    if (node == nullptr)
+    {
+        return;
+    }
+    
+    clearTree(node->left);
+    clearTree(node->right);
+    
+    delete node;
+    
 }
