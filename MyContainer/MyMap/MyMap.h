@@ -85,7 +85,7 @@ MyMap<K, V>::MyMap(const MyMap& rhs)
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
-    : root(rhs.root)    // 값 타입임으로 복사해도 무관하다.
+    : root(rhs.root)
 {
     /*
      * 이동 생성자
@@ -123,7 +123,19 @@ MyMap<K, V>& MyMap<K, V>::operator=(const MyMap& rhs)
 template <typename K, typename V>
 MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 {
-    
+    /*
+     * 이동 대입 연산자
+     *	- 이동 생성자와 비슷하게 동작한다.
+     *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+     */
+
+    if (rhs.root == nullptr)
+    {
+        return *this;
+    }
+
+    root = rhs.root;
+    return *this;
 }
 
 template <typename K, typename V>
