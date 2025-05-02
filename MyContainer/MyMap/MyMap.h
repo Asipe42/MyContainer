@@ -70,6 +70,8 @@ private:
     void rotateLeft(Node* x);
     void rotateRight(Node* y);
 
+    Node* minimum(Node* node);
+    
     Node* root;
 };
 
@@ -663,4 +665,15 @@ void MyMap<K, V>::rotateRight(Node* y)
     // Algorithm 3
     x->right = y;
     y->parent = x;
+}
+
+template <typename K, typename V>
+typename MyMap<K, V>::Node* MyMap<K, V>::minimum(Node* node)
+{
+    while (node->left != NIL)
+    {
+        node = node->left;
+    }
+
+    return node;
 }
