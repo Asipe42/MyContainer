@@ -55,7 +55,7 @@ private:
     Node* copyTree(Node* node);
     void clearTree(Node* node);
     
-    void fixViolation(Node* node);
+    void fixViolation(Node* z);
     void rotateLeft(Node* x);
     void rotateRight(Node* y);
 
@@ -239,9 +239,93 @@ void MyMap<K, V>::clearTree(Node* node)
 }
 
 template <typename K, typename V>
-void MyMap<K, V>::fixViolation(Node* node)
+void MyMap<K, V>::fixViolation(Node* z)
 {
-    
+    /*
+     * Red-Black Tree 규칙
+     *  1. 루트는 항상 블랙이다.
+     *  2. 레드 노드는 레드 노드를 가질 수 없다.
+     *  3. 모든 경로는 같은 수의 블랙 노드를 가져야 한다.
+     *  4. 모든 리프 노드는 블랙이다.
+     *  5. 리프 노드는 nullptr이다.
+     */
+
+    /*
+     * 경우의 수
+     *  A. Z가 Root
+     *      - Z를 Black으로 바꾼다.
+     *  B. Uncle이 Red
+     *      - Z의 부모와 Uncle을 Black으로 바꾸고, 조부모를 Red로 바꾼다.
+     *  C. Uncle이 Black, 내부 삼각형
+     *      - Rotate Left 하여 Case D로 이동
+     *  D. Uncle이 Black, 일직선
+     *      - Z의 부모를 Black으로, 조부모를 Red로 바꾸고 Rotate Right 한다.
+     */
+
+    // 1, 2번 위반 검사
+    while (z != root && z->parent->color == Red)
+    {
+        Node* gp = z->parent->parent;
+        if (z->parent == gp->left)
+        {
+            // Uncle이 오른쪽
+            Node* uncle = gp->right;
+
+            // Case B
+            if (uncle && uncle->color == Red)
+            {
+                z->parent->color = Black;
+                uncle->color = Black;
+                gp->color = Red;
+                z = gp; // 조부모로 이동하여 재귀적 적용
+            }
+            else
+            {
+                // Case C
+                if (z == z->parent->right)
+                {
+                    z = z->parent;
+                    rotateLeft(z);
+                }
+
+                // Case D
+                z->parent->color = Black;
+                gp->color = Red;
+                rotateRight(gp);
+            }
+        }
+        else
+        {
+            // Uncle이 왼쪽
+            Node* uncle = gp->left;
+
+            // Case B
+            if (uncle && uncle->color == Red)
+            {
+                z->parent->color = Black;
+                uncle->color = Black;
+                gp->color = Red;
+                z = gp; // 조부모로 이동하여 재귀적 적용
+            }
+            else
+            {
+                // Case C
+                if (z == z->parent->left)
+                {
+                    z = z->parent;
+                    rotateLeft(z);
+                }
+
+                // Case D
+                z->parent->color = Black;
+                gp->color = Red;
+                rotateRight(gp);
+            }
+        }
+    }
+
+    // Case A
+    root->Color = Black;
 }
 
 template <typename K, typename V>
