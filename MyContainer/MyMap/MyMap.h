@@ -48,9 +48,11 @@ private:
         Node* right;
         Node* parent;
 
-        Node(K k, V v)
-            : key(k), value(v), color(NodeColor::Red), left(nullptr), right(nullptr), parent(nullptr) { } 
+        Node(K k, V v, NodeColor c = NodeColor::Red)
+            : key(k), value(v), color(NodeColor::Red), left(NIL), right(NIL), parent(nullptr) { } 
     };
+
+    static Node* NIL;
     
     Node* copyTree(Node* node);
     void clearTree(Node* node);
@@ -62,6 +64,9 @@ private:
 
     Node* root;
 };
+
+template <typename K, typename V>
+typename MyMap<K, V>::Node* MyMap<K, V>::NIL = new Node(K(), V(), NodeColor::Black);
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap() noexcept
