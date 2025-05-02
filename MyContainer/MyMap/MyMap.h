@@ -65,7 +65,8 @@ private:
     void clearTree(Node* node);
     
     void insertBinaryTree(Node* z);
-    void fixViolation(Node* z);
+    void fixViolation_insert(Node* z);
+    void fixViolation_erase(Node* x);
     void rotateLeft(Node* x);
     void rotateRight(Node* y);
 
@@ -183,6 +184,23 @@ void MyMap<K, V>::insert(K key, V value)
 template <typename K, typename V>
 void MyMap<K, V>::erase(K key)
 {
+    Node* target = find(key);
+    if (target == NIL)
+    {
+        return;
+    }
+
+    /*
+     * 경우의 수
+     *  A. target이 리프 노드이다.
+     *      - 부모와 연결을 끊는다.
+     *  B. target이 자식이 하나인 노드이다.
+     *      - 부모와 연결을 끊고, 자식을 부모와 연결한다.
+     *  C. target이 자식이 두 개인 노드이다.
+     *      - target의 후계자를 찾는다.
+     *      - 후계자를 target과 교체한다.
+     *      - 후계자는 중위 순회에 의거하여 왼쪽 노드로 한다.
+     */
 }
 
 template <typename K, typename V>
@@ -339,13 +357,13 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
 }
 
 template <typename K, typename V>
-void MyMap<K, V>::fixViolation(Node* z)
+void MyMap<K, V>::fixViolation_insert(Node* z)
 {
     /*
      * Red-Black Tree 규칙
      *  1. 루트는 항상 블랙이다.
      *  2. 레드 노드는 레드 노드를 가질 수 없다.
-     *  3. 모든 경로는 같은 수의 블랙 노드를 가져야 한다.
+     *  3. 모든 경로는 같은 수의 블랙 노드(Black Height)를 가져야 한다.
      *  4. 모든 리프 노드는 블랙이다.
      *  5. 리프 노드는 nullptr이다.
      */
@@ -426,6 +444,121 @@ void MyMap<K, V>::fixViolation(Node* z)
 
     // Case A
     root->color = Black;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::fixViolation_erase(Node* x)
+{
+    /*
+     * Red-Black Tree 규칙
+     *  1. 루트는 항상 블랙이다.
+     *  2. 레드 노드는 레드 노드를 가질 수 없다.
+     *  3. 모든 경로는 같은 수의 블랙 노드(Black Height)를 가져야 한다.
+     *  4. 모든 리프 노드는 블랙이다.
+     *  5. 리프 노드는 nullptr이다.
+     */
+
+    /*
+     * Double Black
+     *  - 삭제된 노드가 Black일 때 발생한다.
+     *  - Black Height를 유지하기 위해 추가적인 처리가 필요하다.
+     *  - Double Black은 Black Height를 1 감소시킨 것과 같다.
+     *  - Double Black을 해결하기 위해서는 다음과 같은 경우를 고려해야 한다.
+     *      - Case A: 삭제된 노드가 루트인 경우
+     *          - double black 해소
+     *      - Case B: 삭제된 노드의 형제 노드가 Red인 경우
+     *          - 형제 노드를 Black으로 바꾸고, 부모를 Red로 바꾸고 회전한 다음 Case C~F로 간다.
+     *      - Case C: 삭제된 노드의 형제 노드가 Black이고, 두 자식이 Black인 경우
+     *          - 형제 노드를 Red로 바꾸고, Double Black을 부모로 올린다.
+     *      - Case D: 삭제된 노드의 형제 노드가 Black이고, 왼쪽 자식이 Red, 오른쪽 자식이 Black인 경우
+     *          - 형제 노드를 Red로 바꾸고, 왼쪽 자식을 Black으로 바꾸고 회전한 다음 Case F로 간다.
+     *      - Case E: 삭제된 노드의 형제 노드가 Black이고, 오른쪽 자식이 Red인 경우
+     *          - 형제 노드를 부모와 같은 색으로 바꾸고, 부모를 Black으로 바꾸고 오른쪽 자식을 Black으로 바꾸고 회전한다.
+     */
+    
+    while (x != root && x->color == Black)
+    {
+        // 왼쪽 노드인 경우
+        if (x == x->parent->left)
+        {
+            Node* s = x->parent->right;
+
+            // Case B
+            if (s.color == Red)
+            {
+                s->color = Black;
+                x->parent->color = Red;
+                rotateLeft(x->parent);
+                s = x->parent->right; // 회전 후 형제노드
+            }
+
+            // Case C: 이전 s가 red였음으로, 현재 s는 black이 보장된다
+            if (s->left->color == Black && s->right->color == Black)
+            {
+                s->color = Red;
+                x = x->parent; // 부모로 이동
+            }
+            else
+            {
+                // Case D
+                if (s->right->color == Black)
+                {
+                    s->left->color = Black;
+                    s->color = Red;
+                    rotateRight(s);
+                    s = x->parent->right;
+                }
+
+                // Case E: CaseC와 D에 의해 왼쪽 자식이 Black, 오른쪽 자식이 Red임이 보장된다.
+                s->color = x->parent->color;
+                x->parent->color = Black;
+                s->right->color = Black;
+                rotateLeft(x->parent);
+                x = root;
+            }
+        }
+        // 오른쪽 노드인 경우 (대칭 처리)
+        else
+        {
+            Node* s = x->parent->left;
+
+            // Case B
+            if (s.color == Red)
+            {
+                s->color = Black;
+                x->parent->color = Red;
+                rotateRight(x->parent); 
+                s = x->parent->left; // 회전 후 형제노드. s가 red이므로, s의 자식은 black이다.
+            }
+
+            // Case C
+            if (s->left->color == Black && s->right->color == Black)
+            {
+                s->color = Red;
+                x = x->parent; // 부모로 이동
+            }
+            else
+            {
+                // Case D
+                if (s->left->color == Black)
+                {
+                    s->right->color = Black;
+                    s->color = Red;
+                    rotateLeft(s);
+                    s = x->parent->left;
+                }
+                
+                // Case E: CaseC와 D에 의해 왼쪽 자식이 Black, 오른쪽 자식이 Red임이 보장된다.
+                s->color = x->parent->color;
+                x->parent->color = Black;
+                s->left->color = Black;
+                rotateRight(x->parent);
+                x = root;
+            }
+        }
+    }
+
+    x->color = Black;
 }
 
 template <typename K, typename V>
