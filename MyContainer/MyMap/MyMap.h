@@ -263,12 +263,12 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
     while (x != nullptr)
     {
         y = x;
-        if (x->key < z->key)
+        if (z->key < x->key)
         {
             // Case B
             x = x->left;
         }
-        else if (x->key > z->key)
+        else if (z->key > x->key)
         {
             // Case C
             x = x->right;
@@ -384,7 +384,7 @@ void MyMap<K, V>::fixViolation(Node* z)
     }
 
     // Case A
-    root->Color = Black;
+    root->color = Black;
 }
 
 template <typename K, typename V>
