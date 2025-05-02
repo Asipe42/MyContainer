@@ -105,11 +105,25 @@ MyMap<K, V>::~MyMap() noexcept
 template <typename K, typename V>
 MyMap<K, V>& MyMap<K, V>::operator=(const MyMap& rhs)
 {
+    /*
+     * 복사 대입	연산자
+     *	- 복사 생성자와 비슷하게 동작한다.
+     *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
+     */
+
+    if (rhs.root == nullptr)
+    {
+        return *this;
+    }
+
+    root = copyTree(rhs.root);
+    return *this;
 }
 
 template <typename K, typename V>
 MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 {
+    
 }
 
 template <typename K, typename V>
@@ -205,5 +219,4 @@ void MyMap<K, V>::clearTree(Node* node)
     clearTree(node->right);
     
     delete node;
-    
 }
