@@ -10,9 +10,16 @@ public:
         Black = 1,
     };
 
+    struct Node;
     class MyIterator
     {
-        
+    public:
+        MyIterator() : current(NIL) { }
+        MyIterator(Node* node) : current(node) { }
+        V& operator*() const { return current->value; }
+
+    private:
+        Node* current;
     };
     
     MyMap() noexcept;
@@ -186,6 +193,20 @@ void MyMap<K, V>::erase(MyIterator it)
 template <typename K, typename V>
 typename MyMap<K, V>::MyIterator MyMap<K, V>::find(K key)
 {
+    Node* x = root;
+    while (x != NIL && x->key != key)
+    {
+        if (key < x->key)
+        {
+            x = x->left;
+        }
+        else
+        {
+            x = x->right;
+        }
+    }
+
+    return x; // 암시적 형변환 주의
 }
 
 template <typename K, typename V>
