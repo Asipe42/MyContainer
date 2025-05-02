@@ -51,10 +51,11 @@ private:
         Node(K k, V v)
             : key(k), value(v), color(NodeColor::Red), left(nullptr), right(nullptr), parent(nullptr) { } 
     };
-
+    
     Node* copyTree(Node* node);
     void clearTree(Node* node);
     
+    void insertBinaryTree(Node* z);
     void fixViolation(Node* z);
     void rotateLeft(Node* x);
     void rotateRight(Node* y);
@@ -150,7 +151,9 @@ V& MyMap<K, V>::operator[](const K& key)
 template <typename K, typename V>
 void MyMap<K, V>::insert(K key, V value)
 {
-    
+    Node* newNode = new Node(key, value);
+    insertBinaryTree(newNode);
+    fixViolation(newNode);
 }
 
 template <typename K, typename V>
@@ -236,6 +239,62 @@ void MyMap<K, V>::clearTree(Node* node)
     clearTree(node->right);
     
     delete node;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::insertBinaryTree(Node* z)
+{
+    /*
+     * 이진 트리 삽입
+     *  - key를 기준으로 왼쪽 자식은 key가 작고, 오른쪽 자식은 key가 크다.
+     */
+
+    Node* y = nullptr;  // 삽입 노드의 부모 후보
+    Node* x = root;     // 탐색 중인 노드
+
+    /*
+     * 경우의 수
+     *  A. x가 nullptr
+     *  B. x의 key가 z의 key보다 작다.
+     *  C. x의 key가 z의 key보다 크다.
+     *  D. x의 key가 z의 key와 같다. (중복 허용 X)
+     */
+    
+    while (x != nullptr)
+    {
+        y = x;
+        if (x->key < z->key)
+        {
+            // Case B
+            x = x->left;
+        }
+        else if (x->key > z->key)
+        {
+            // Case C
+            x = x->right;
+        }
+        else
+        {
+            // Case D
+            delete z;
+            return;
+        }
+    }
+
+    z->parent = y;
+    if (y == nullptr) 
+    {
+        // Case A
+        root = z;
+    }
+    else if (z->key < y->key)
+    {
+        y->left = z;
+    }
+    else
+    {
+        y->right = z;
+    }
 }
 
 template <typename K, typename V>
