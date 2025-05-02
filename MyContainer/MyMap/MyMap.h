@@ -48,8 +48,8 @@ private:
         Node* right;
         Node* parent;
 
-        Node(K k, V v, NodeColor c = NodeColor::Red)
-            : key(k), value(v), color(NodeColor::Red), left(NIL), right(NIL), parent(nullptr) { } 
+        Node(K k, V v, const NodeColor c = NodeColor::Red)
+            : key(k), value(v), color(c), left(nullptr), right(nullptr), parent(nullptr) { } 
     };
 
     static Node* NIL;
@@ -70,13 +70,13 @@ typename MyMap<K, V>::Node* MyMap<K, V>::NIL = new Node(K(), V(), NodeColor::Bla
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap() noexcept
-    : root(nullptr)
+    : root(NIL)
 {
 }
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(const MyMap& rhs)
-    : root(nullptr)
+    : root(NIL)
 {
     /*
      * 복사 생성자
@@ -84,7 +84,7 @@ MyMap<K, V>::MyMap(const MyMap& rhs)
      *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
      */
     
-    if (rhs.root == nullptr)
+    if (rhs.root == NIL)
     {
         return;
     }
@@ -102,7 +102,7 @@ MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
      *  - rvalue는 임시 객체를 의미한다.
      */
     
-    rhs.root = nullptr; // 소유권 이전을 명확히 한다.
+    rhs.root = NIL; // 소유권 이전을 명확히 한다.
 }
 
 template <typename K, typename V>
@@ -120,12 +120,20 @@ MyMap<K, V>& MyMap<K, V>::operator=(const MyMap& rhs)
      *	- 복사 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
      */
 
-    if (rhs.root == nullptr)
+    if (this != *rhs)
     {
-        return *this;
+        clear();
+        
+        if (rhs.root != NIL)
+        {
+            root = copyTree(rhs.root); // 깊은 복사 수행
+        }
+        else
+        {
+            root = NIL;
+        }
     }
-
-    root = copyTree(rhs.root);
+    
     return *this;
 }
 
@@ -138,12 +146,16 @@ MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
      *  - 이동 생성자와의 차이점은 이미 메모리가 할당되어 있는 상태에서 동작한다는 것이다.
      */
 
-    if (rhs.root == nullptr)
+    if (this == &rhs)
     {
         return *this;
     }
 
-    root = rhs.root;
+    clear(); 
+
+    root = rhs.root; 
+    rhs.root = NIL;
+    
     return *this;
 }
 
@@ -235,7 +247,7 @@ typename MyMap<K, V>::Node* MyMap<K, V>::copyTree(Node* node)
 template <typename K, typename V>
 void MyMap<K, V>::clearTree(Node* node)
 {
-    if (node == nullptr)
+    if (node == NIL)
     {
         return;
     }
@@ -254,6 +266,9 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
      *  - key를 기준으로 왼쪽 자식은 key가 작고, 오른쪽 자식은 key가 크다.
      */
 
+    z->left = NIL;
+    z->right = NIL;
+    
     Node* y = nullptr;  // 삽입 노드의 부모 후보
     Node* x = root;     // 탐색 중인 노드
 
@@ -265,7 +280,7 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
      *  D. x의 key가 z의 key와 같다. (중복 허용 X)
      */
     
-    while (x != nullptr)
+    while (x != NIL)
     {
         y = x;
         if (z->key < x->key)
@@ -377,13 +392,13 @@ void MyMap<K, V>::fixViolation(Node* z)
                 if (z == z->parent->left)
                 {
                     z = z->parent;
-                    rotateLeft(z);
+                    rotateRight(z);
                 }
 
                 // Case D
                 z->parent->color = Black;
                 gp->color = Red;
-                rotateRight(gp);
+                rotateLeft(gp);
             }
         }
     }
