@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "MyList/MyList.h"
 
 template <typename K, typename V>
 class MyMap
@@ -55,6 +54,10 @@ private:
 
     Node* copyTree(Node* node);
     void clearTree(Node* node);
+    
+    void fixViolation(Node* node);
+    void rotateLeft(Node* x);
+    void rotateRight(Node* y);
 
     Node* root;
 };
@@ -141,11 +144,13 @@ MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 template <typename K, typename V>
 V& MyMap<K, V>::operator[](const K& key)
 {
+    
 }
 
 template <typename K, typename V>
 void MyMap<K, V>::insert(K key, V value)
 {
+    
 }
 
 template <typename K, typename V>
@@ -231,4 +236,114 @@ void MyMap<K, V>::clearTree(Node* node)
     clearTree(node->right);
     
     delete node;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::fixViolation(Node* node)
+{
+    
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::rotateLeft(Node* x)
+{
+    /*
+     * 회전
+     *  - 레드 블랙 이진 트리의 Violation을 해결하기 위해 동작이다.
+     *  - 자식을 부모에 위치로 올리고, 부모가 반대편 자식이 된다.
+     *  - x는 부모, y는 오른쪽 자식이다.
+     */
+
+    /*
+     * 알고리즘
+     *  1. x의 오른쪽 자식을 y의 왼쪽 자식으로 교체한다.
+     *  2. y를 x의 부모와 연결한다. (승격)
+     *  3. y와 x를 연결한다.
+     */
+
+    Node* y = x->right;
+
+    // Algorithm 1
+    x->right = y->left;
+    if (y->left != nullptr)
+    {
+        y->left->parent = x;
+    }
+
+    /*
+     * Algorithm 2
+     * 경우의 수
+     *  1. x가 루트이다.
+     *  2. x가 부모의 왼쪽 자식이다.
+     *  3. x가 부모의 오른쪽 자식이다.
+     */
+    y->parent = x->parent;
+    if (x->parent == nullptr)
+    {
+        root = y;
+    }
+    else if (x->parent->left == x)
+    {
+        x->parent->left = y;
+    }
+    else
+    {
+        x->parent->right = y;
+    }
+
+    // Algorithm 3
+    y->left = x;
+    x->parent = y;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::rotateRight(Node* y)
+{
+    /*
+     * 회전
+     *  - 레드 블랙 이진 트리의 Violation을 해결하기 위해 동작이다.
+     *  - 자식을 부모에 위치로 올리고, 부모가 반대편 자식이 된다.
+     *  - y는 부모, x는 왼쪽 자식이다.
+     */
+
+    /*
+     * 알고리즘
+     *  1. y의 왼쪽 자식을 x의 오른쪽 자식으로 교체한다.
+     *  2. x를 y의 부모와 연결한다. (승격)
+     *  3. x와 y를 연결한다.
+     */
+    
+    Node* x = y->left;
+
+    // Algorithm 1
+    y->left = x->right;
+    if (x->right != nullptr)
+    {
+        x->right->parent = y;
+    }
+    
+    /*
+     * Algorithm 2
+     * 경우의 수
+     *  1. y가 루트이다.
+     *  2. y가 부모의 왼쪽 자식이다.
+     *  3. y가 부모의 오른쪽 자식이다.
+     */
+    x->parent = y->parent;
+    if (y->parent == nullptr)
+    {
+        root = x;
+    }
+    else if (y->parent->left == y)
+    {
+        y->parent->left = x;
+    }
+    else
+    {
+        y->parent->right = x;
+    }
+
+    // Algorithm 3
+    x->right = y;
+    y->parent = x;
 }
