@@ -16,7 +16,7 @@ public:
     public:
         MyIterator() : current(NIL) { }
         MyIterator(Node* node) : current(node) { }
-        V& operator*() const { return current->value; }
+        Node& operator*() const { return *current; }
 
     private:
         Node* current;
@@ -33,9 +33,8 @@ public:
     V& operator[](const K& key);
     void insert(K key, V value);
     void erase(K key);
-    void erase(MyIterator it);
     
-    MyIterator find(K key);
+    Node* find(K key);
     bool count(K key) const;
 
     void clear();
@@ -56,10 +55,8 @@ private:
         Node* parent;
 
         Node(K k, V v, const NodeColor c = NodeColor::Red)
-            : key(k), value(v), color(c), left(nullptr), right(nullptr), parent(nullptr) { } 
+            : key(k), value(v), color(c), left(nullptr), right(nullptr), parent(nullptr) { }
     };
-
-    static Node* NIL;
     
     Node* copyTree(Node* node);
     void clearTree(Node* node);
@@ -71,8 +68,10 @@ private:
     void rotateRight(Node* y);
 
     Node* minimum(Node* node);
+    void transplant(Node* x, Node* y);
     
     Node* root;
+    static Node* NIL;
 };
 
 template <typename K, typename V>
@@ -104,7 +103,7 @@ MyMap<K, V>::MyMap(const MyMap& rhs)
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
-    : root(rhs.root)
+    : root(NIL)
 {
     /*
      * 이동 생성자
@@ -163,9 +162,9 @@ MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 
     clear(); 
 
-    root = rhs.root; 
-    rhs.root = NIL;
-    
+    root = rhs.root;
+    rhs.root = nullptr;
+
     return *this;
 }
 
@@ -180,7 +179,7 @@ void MyMap<K, V>::insert(K key, V value)
 {
     Node* newNode = new Node(key, value);
     insertBinaryTree(newNode);
-    fixViolation(newNode);
+    fixViolation_insert(newNode);
 }
 
 template <typename K, typename V>
@@ -193,25 +192,72 @@ void MyMap<K, V>::erase(K key)
     }
 
     /*
-     * 경우의 수
-     *  A. target이 리프 노드이다.
-     *      - 부모와 연결을 끊는다.
-     *  B. target이 자식이 하나인 노드이다.
-     *      - 부모와 연결을 끊고, 자식을 부모와 연결한다.
-     *  C. target이 자식이 두 개인 노드이다.
-     *      - target의 후계자를 찾는다.
-     *      - 후계자를 target과 교체한다.
-     *      - 후계자는 중위 순회에 의거하여 왼쪽 노드로 한다.
+     * 단계
+     *  1. target의 경우의 수를 판단한다.
+     *  2. 부모/자식 간 연결을 끊거나 대체한다.
+     *  3. dobule black 상황을 판단하고 해결한다.
      */
+    
+    Node* replacement;
+    NodeColor cacheColor = target->color;
+
+    /*
+     * 경우의 수
+     *  A. target의 자식이 없는 경우
+     *  B. target이 왼쪽 자식만 있는 경우
+     *  C. target이 오른쪽 자식만 있는 경우
+     *  D. target의 자식이 두 개인 경우
+     *      - 후계자를 찾아 대체한다.
+     *      - 후계자는 오른쪽 서브 트리에서 가장 작은 노드이다.
+     *      - 후계자를 오른쪽 서브 트리에서 가장 작은 노드로 하는 이유는 중위 순회를 유지하기 위함이다.
+     */
+    
+    if (target->right == NIL)
+    {
+        // Case A, B
+        replacement = target->left;
+        transplant(target, target->left);
+    }
+    else if (target->left == NIL)
+    {
+        // Case A, C
+        replacement = target->right;
+        transplant(target, target->right);
+    }
+    else
+    {
+        // Case D
+        Node* successor = minimum(target->right);
+        replacement = successor;
+        
+        // successor target을 대체하기 전에, successor의 자식을 successor의 부모와 연결한다.
+        if (successor->parent != target)
+        {
+            transplant(successor, successor->right); // 왼쪽 자식은 가질 수 없음으로 무시
+
+            successor->left = target->left;
+            successor->right = target->right;
+            target->left->parent = successor;
+            target->right->parent = successor;
+        }
+        
+        transplant(target, successor);
+    }
+
+    delete target;
+    
+    if (cacheColor == Black)
+    {
+        fixViolation_erase(replacement);
+        if (replacement == NIL)
+        {
+            replacement->parent = nullptr;
+        }
+    }
 }
 
 template <typename K, typename V>
-void MyMap<K, V>::erase(MyIterator it)
-{
-}
-
-template <typename K, typename V>
-typename MyMap<K, V>::MyIterator MyMap<K, V>::find(K key)
+typename MyMap<K, V>::Node* MyMap<K, V>::find(K key)
 {
     Node* x = root;
     while (x != NIL && x->key != key)
@@ -486,7 +532,7 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
             Node* s = x->parent->right;
 
             // Case B
-            if (s.color == Red)
+            if (s->color == Red)
             {
                 s->color = Black;
                 x->parent->color = Red;
@@ -525,7 +571,7 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
             Node* s = x->parent->left;
 
             // Case B
-            if (s.color == Red)
+            if (s->color == Red)
             {
                 s->color = Black;
                 x->parent->color = Red;
@@ -584,7 +630,7 @@ void MyMap<K, V>::rotateLeft(Node* x)
 
     // Algorithm 1
     x->right = y->left;
-    if (y->left != nullptr)
+    if (y->left != NIL)
     {
         y->left->parent = x;
     }
@@ -676,4 +722,33 @@ typename MyMap<K, V>::Node* MyMap<K, V>::minimum(Node* node)
     }
 
     return node;
+}
+
+template <typename K, typename V>
+void MyMap<K, V>::transplant(Node* x, Node* y)
+{
+    /*
+     * 경우의 수
+     *  A. x가 루트이다.
+     *  B. x가 부모의 왼쪽 자식이다.
+     *  C. x가 부모의 오른쪽 자식이다.
+     */
+
+    if (x->parent == nullptr)
+    {
+        // Case A
+        root = y;
+    }
+    else if (x == x->parent->left)
+    {
+        // Case B
+        x->parent->left = y;
+    }
+    else
+    {
+        // Case C
+        x->parent->right = y;
+    }
+    
+    y->parent = x->parent;
 }
