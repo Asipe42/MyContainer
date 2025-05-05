@@ -11,18 +11,8 @@ public:
         Red = 0,
         Black = 1,
     };
-
+    
     struct Node;
-    class MyIterator
-    {
-    public:
-        MyIterator() : current(NIL) { }
-        MyIterator(Node* node) : current(node) { }
-        Node& operator*() const { return *current; }
-
-    private:
-        Node* current;
-    };
     
     MyMap() noexcept;
     MyMap(const MyMap& rhs);
@@ -41,9 +31,6 @@ public:
     void clear();
     size_t size() const;
     bool empty() const;
-
-    MyIterator begin();
-    MyIterator end();
 
 private:
     struct Node
@@ -305,16 +292,6 @@ template <typename K, typename V>
 bool MyMap<K, V>::empty() const
 {
     return m_size == 0;
-}
-
-template <typename K, typename V>
-typename MyMap<K, V>::MyIterator MyMap<K, V>::begin()
-{
-}
-
-template <typename K, typename V>
-typename MyMap<K, V>::MyIterator MyMap<K, V>::end()
-{
 }
 
 template <typename K, typename V>
