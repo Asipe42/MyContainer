@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright Modin, All Rights Reserved.
+
+#pragma once
 
 template <typename K, typename V>
 class MyMap
@@ -171,7 +173,14 @@ MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 template <typename K, typename V>
 V& MyMap<K, V>::operator[](const K& key)
 {
-    
+    Node* node = find(key);
+    if (node == NIL)
+    {
+        insert(key, V());
+        node = find(key);
+    }
+
+    return node->value;
 }
 
 template <typename K, typename V>
