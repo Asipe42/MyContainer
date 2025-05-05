@@ -37,7 +37,6 @@ public:
     void erase(K key);
     
     Node* find(K key);
-    bool count(K key) const;
 
     void clear();
     size_t size() const;
@@ -72,7 +71,9 @@ private:
     Node* minimum(Node* node);
     void transplant(Node* x, Node* y);
     
-    Node* root;
+    Node* m_root;
+    size_t m_size;
+
     static Node* NIL;
 };
 
@@ -81,13 +82,13 @@ typename MyMap<K, V>::Node* MyMap<K, V>::NIL = new Node(K(), V(), NodeColor::Bla
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap() noexcept
-    : root(NIL)
+    : m_root(NIL)
 {
 }
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(const MyMap& rhs)
-    : root(NIL)
+    : m_root(NIL)
 {
     /*
      * 복사 생성자
@@ -95,17 +96,17 @@ MyMap<K, V>::MyMap(const MyMap& rhs)
      *	- 깊은 복사란 포인터가 참조하고 있는 메모리에 있는 데이터에 대한 사본을 만드는 것이다.
      */
     
-    if (rhs.root == NIL)
+    if (rhs.m_root == NIL)
     {
         return;
     }
 
-    root = copyTree(rhs.root);
+    m_root = copyTree(rhs.m_root);
 }
 
 template <typename K, typename V>
 MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
-    : root(NIL)
+    : m_root(NIL)
 {
     /*
      * 이동 생성자
@@ -113,7 +114,7 @@ MyMap<K, V>::MyMap(MyMap&& rhs) noexcept
      *  - rvalue는 임시 객체를 의미한다.
      */
     
-    rhs.root = NIL; // 소유권 이전을 명확히 한다.
+    rhs.m_root = NIL; // 소유권 이전을 명확히 한다.
 }
 
 template <typename K, typename V>
@@ -135,13 +136,13 @@ MyMap<K, V>& MyMap<K, V>::operator=(const MyMap& rhs)
     {
         clear();
         
-        if (rhs.root != NIL)
+        if (rhs.m_root != NIL)
         {
-            root = copyTree(rhs.root); // 깊은 복사 수행
+            m_root = copyTree(rhs.m_root); // 깊은 복사 수행
         }
         else
         {
-            root = NIL;
+            m_root = NIL;
         }
     }
     
@@ -164,8 +165,8 @@ MyMap<K, V>& MyMap<K, V>::operator=(MyMap&& rhs) noexcept
 
     clear(); 
 
-    root = rhs.root;
-    rhs.root = nullptr;
+    m_root = rhs.m_root;
+    rhs.m_root = nullptr;
 
     return *this;
 }
@@ -189,6 +190,8 @@ void MyMap<K, V>::insert(K key, V value)
     Node* newNode = new Node(key, value);
     insertBinaryTree(newNode);
     fixViolation_insert(newNode);
+
+    m_size++;
 }
 
 template <typename K, typename V>
@@ -263,12 +266,14 @@ void MyMap<K, V>::erase(K key)
             replacement->parent = nullptr;
         }
     }
+
+    m_size--;
 }
 
 template <typename K, typename V>
 typename MyMap<K, V>::Node* MyMap<K, V>::find(K key)
 {
-    Node* x = root;
+    Node* x = m_root;
     while (x != NIL && x->key != key)
     {
         if (key < x->key)
@@ -285,24 +290,21 @@ typename MyMap<K, V>::Node* MyMap<K, V>::find(K key)
 }
 
 template <typename K, typename V>
-bool MyMap<K, V>::count(K key) const
-{
-}
-
-template <typename K, typename V>
 void MyMap<K, V>::clear()
 {
-    clearTree(root);
+    clearTree(m_root);
 }
 
 template <typename K, typename V>
 size_t MyMap<K, V>::size() const
 {
+    return m_size;
 }
 
 template <typename K, typename V>
 bool MyMap<K, V>::empty() const
 {
+    return m_size == 0;
 }
 
 template <typename K, typename V>
@@ -366,7 +368,7 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
     z->right = NIL;
     
     Node* y = nullptr;  // 삽입 노드의 부모 후보
-    Node* x = root;     // 탐색 중인 노드
+    Node* x = m_root;     // 탐색 중인 노드
 
     /*
      * 경우의 수
@@ -401,7 +403,7 @@ void MyMap<K, V>::insertBinaryTree(Node* z)
     if (y == nullptr) 
     {
         // Case A
-        root = z;
+        m_root = z;
     }
     else if (z->key < y->key)
     {
@@ -438,7 +440,7 @@ void MyMap<K, V>::fixViolation_insert(Node* z)
      */
 
     // 1, 2번 위반 검사
-    while (z != root && z->parent->color == Red)
+    while (z != m_root && z->parent->color == Red)
     {
         Node* gp = z->parent->parent;
         if (z->parent == gp->left)
@@ -500,7 +502,7 @@ void MyMap<K, V>::fixViolation_insert(Node* z)
     }
 
     // Case A
-    root->color = Black;
+    m_root->color = Black;
 }
 
 template <typename K, typename V>
@@ -533,7 +535,7 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
      *          - 형제 노드를 부모와 같은 색으로 바꾸고, 부모를 Black으로 바꾸고 오른쪽 자식을 Black으로 바꾸고 회전한다.
      */
     
-    while (x != root && x->color == Black)
+    while (x != m_root && x->color == Black)
     {
         // 왼쪽 노드인 경우
         if (x == x->parent->left)
@@ -571,7 +573,7 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
                 x->parent->color = Black;
                 s->right->color = Black;
                 rotateLeft(x->parent);
-                x = root;
+                x = m_root;
             }
         }
         // 오른쪽 노드인 경우 (대칭 처리)
@@ -610,7 +612,7 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
                 x->parent->color = Black;
                 s->left->color = Black;
                 rotateRight(x->parent);
-                x = root;
+                x = m_root;
             }
         }
     }
@@ -654,7 +656,7 @@ void MyMap<K, V>::rotateLeft(Node* x)
     y->parent = x->parent;
     if (x->parent == nullptr)
     {
-        root = y;
+        m_root = y;
     }
     else if (x->parent->left == x)
     {
@@ -706,7 +708,7 @@ void MyMap<K, V>::rotateRight(Node* y)
     x->parent = y->parent;
     if (y->parent == nullptr)
     {
-        root = x;
+        m_root = x;
     }
     else if (y->parent->left == y)
     {
@@ -746,7 +748,7 @@ void MyMap<K, V>::transplant(Node* x, Node* y)
     if (x->parent == nullptr)
     {
         // Case A
-        root = y;
+        m_root = y;
     }
     else if (x == x->parent->left)
     {
