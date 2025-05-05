@@ -2,6 +2,24 @@
 
 #pragma once
 
+/*
+ * 맵
+ *	- 키와 값의 쌍으로 이루어진 데이터 구조이다.
+ *	- 내부적으로 Red-Black Tree를 사용하여 구현한다.
+ */
+
+/*
+ * Red-Black Tree
+ *	- 이진 탐색 트리의 일종으로, 스스로 균형을 유지하는 트리이다.
+ *	- 노드의 색(Red, Black)을 사용하여 균형을 유지한다.
+ *	- 아래의 규칙을 따른다.
+ *      1. 모든 노드는 Red 또는 Black이다.
+ *      2. 루트는 항상 블랙이다.
+ *      2. Red 노드는 Red 노드를 가질 수 없다.
+ *      3. 모든 경로는 같은 수의 Black 노드(Black Height)가 있어야 한다.
+ *      4. 모든 리프(NIL 노드)는 Black이다.        
+ */
+
 template <typename K, typename V>
 class MyMap
 {
@@ -397,11 +415,11 @@ void MyMap<K, V>::fixViolation_insert(Node* z)
 {
     /*
      * Red-Black Tree 규칙
-     *  1. 루트는 항상 블랙이다.
-     *  2. 레드 노드는 레드 노드를 가질 수 없다.
-     *  3. 모든 경로는 같은 수의 블랙 노드(Black Height)를 가져야 한다.
-     *  4. 모든 리프 노드는 블랙이다.
-     *  5. 리프 노드는 nullptr이다.
+     *  1. 모든 노드는 Red 또는 Black이다.
+     *  2. 루트는 항상 블랙이다.
+     *  2. Red 노드는 Red 노드를 가질 수 없다.
+     *  3. 모든 경로는 같은 수의 Black 노드(Black Height)가 있어야 한다.
+     *  4. 모든 리프(NIL 노드)는 Black이다.    
      */
 
     /*
@@ -487,11 +505,11 @@ void MyMap<K, V>::fixViolation_erase(Node* x)
 {
     /*
      * Red-Black Tree 규칙
-     *  1. 루트는 항상 블랙이다.
-     *  2. 레드 노드는 레드 노드를 가질 수 없다.
-     *  3. 모든 경로는 같은 수의 블랙 노드(Black Height)를 가져야 한다.
-     *  4. 모든 리프 노드는 블랙이다.
-     *  5. 리프 노드는 nullptr이다.
+     *  1. 모든 노드는 Red 또는 Black이다.
+     *  2. 루트는 항상 블랙이다.
+     *  2. Red 노드는 Red 노드를 가질 수 없다.
+     *  3. 모든 경로는 같은 수의 Black 노드(Black Height)가 있어야 한다.
+     *  4. 모든 리프(NIL 노드)는 Black이다.    
      */
 
     /*
